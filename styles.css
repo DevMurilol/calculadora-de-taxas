@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap');
+
+body {
+    background-color: rgba(0, 168, 104, 1);
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
+.cabecalho {
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.calculadora {
+    padding: 1rem 0 0 0 ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+label {
+    padding-bottom: 1rem;
+}
+
+input {
+    width: 25%;
+    border-radius: 1rem;
+    border-color: black;
+    padding: 0.5rem;
+    box-shadow: 2px 8px 4px rgba(0, 0, 0, 0.3);
+}
+
+.calculadora__botao {
+    width: 30%;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    box-shadow: 2px 6px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.oculto {
+    display: none;
+}
+.resultados {
+    align-items: center;
+    justify-content: center;
+}
+
+.resultados__texto {
+    background-color: white;
+    padding: 6px 3px;
+    color: black;
+    border-radius: 5px;
+    width: 110px;
+    display: flex;
+    text-align: center;
+    box-shadow: 8px 9px 6px rgba(0, 0, 0, 0.3);
+}
+
+#resultados {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    justify-content: center;
+    align-items: first baseline;
+    padding: 0 25%;
+    margin-left: 8%; 
+    font-size: 14px;
+    margin-top: 1rem;
+}
+.rodape{
+display: flex;
+justify-content: center;
+padding-bottom: 1rem ;
+}
+.logo{
+    width:80%;
+    margin-top: auto;
+    background-color: white;
+    border-radius: 2rem;
+    box-shadow: 8px 9px 6px rgba(0, 0, 0, 0.3);
+}

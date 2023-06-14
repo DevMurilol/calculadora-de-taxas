@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Taxas</title>
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<header class="cabecalho">
+    <h1>Calculadora de Taxas</h1>
+</header>
+
+<body>
+    <section class="calculadora" id="calculadora">
+        <label for="taxaMdrDebito">Taxa do Débito (%):</label>
+        <input type="number" id="taxaMdrDebito" step="0.01"><br>
+
+        <label for="taxaMdrCreditoAvista">MDR Crédito Avista (%):</label>
+        <input type="number" id="taxaMdrCreditoAvista" step="0.01"><br>
+
+        <label for="taxaMdrCredito2a6">MDR Crédito Parcelado 2x a 6x (%):</label>
+        <input type="number" id="taxaMdrCredito2a6" step="0.01"><br>
+
+        <label for="taxaMdrCredito7a18">MDR Crédito Parcelado 7x a 18x (%):</label>
+        <input type="number" id="taxaMdrCredito7a18" step="0.01"><br>
+
+        <label for="taxaAntecipacao">Taxa de Antecipação (%):</label>
+        <input type="number" id="taxaAntecipacao" step="0.01"><br>
+
+        <button class="calculadora__botao" onclick="calcularTaxas(),ocultar()">Calcular</button><br><br>
+    </section>
+    <section class="resultados">
+        <div id="resultados"></div>  
+    </section>
+  <footer class="rodape">
+    <button class="calculadora__botao oculto" id="Voltar" onclick="mostrar()">Voltar</button><br><br>
+    <img class="logo" id="logo" src="./img/stone-logo.png" alt="Logo da STONE">
+  </footer>
+
+    <script>
+        function calcularTaxas() {
+            const taxaMdrDebito = parseFloat(document.getElementById('taxaMdrDebito').value);
+            const taxaMdrCreditoAvista = parseFloat(document.getElementById('taxaMdrCreditoAvista').value);
+            const taxaMdrCredito2a6 = parseFloat(document.getElementById('taxaMdrCredito2a6').value);
+            const taxaMdrCredito7a18 = parseFloat(document.getElementById('taxaMdrCredito7a18').value);
+            const taxaAntecipacao = parseFloat(document.getElementById('taxaAntecipacao').value);
+
+            // Funções de cálculo das taxas aqui (mesmo código do exemplo anterior)
+            const taxaCredito = calcularTaxaCredito(taxaMdrCreditoAvista,taxaMdrCredito2a6, taxaMdrCredito7a18, taxaAntecipacao);
+
+            // Exibir os resultados na página HTML
+            const resultadosDiv = document.getElementById('resultados');
+            resultadosDiv.innerHTML = `
+        <p class="resultados__texto">Débito: ${taxaMdrDebito.toFixed(2)}%</p>
+        <p class="resultados__texto">1x: ${taxa[0].toFixed(2)}%</p>
+        <p class="resultados__texto">2x: ${taxa[1].toFixed(2)}%</p>
+        <p class="resultados__texto">3x: ${taxa[2].toFixed(2)}%</p>
+        <p class="resultados__texto">4x: ${taxa[3].toFixed(2)}%</p>
+        <p class="resultados__texto">5x: ${taxa[4].toFixed(2)}%</p>
+        <p class="resultados__texto">6x: ${taxa[5].toFixed(2)}%</p>
+        <p class="resultados__texto">7x: ${taxa[6].toFixed(2)}%</p>
+        <p class="resultados__texto">8x: ${taxa[7].toFixed(2)}%</p>
+        <p class="resultados__texto">9x: ${taxa[8].toFixed(2)}%</p>
+        <p class="resultados__texto">10x: ${taxa[9].toFixed(2)}%</p>
+        <p class="resultados__texto">11x: ${taxa[10].toFixed(2)}%</p>
+        <p class="resultados__texto">12x: ${taxa[11].toFixed(2)}%</p>
+        <p class="resultados__texto">13x: ${taxa[12].toFixed(2)}%</p>
+        <p class="resultados__texto">14x: ${taxa[13].toFixed(2)}%</p>
+        <p class="resultados__texto">15x: ${taxa[14].toFixed(2)}%</p>
+        <p class="resultados__texto">16x: ${taxa[15].toFixed(2)}%</p>
+        <p class="resultados__texto">17x: ${taxa[16].toFixed(2)}%</p>
+        <p class="resultados__texto">18x: ${taxa[17].toFixed(2)}%</p>  
+      `;
+        }
+        function ocultar() {
+            const oculta = document.getElementById('calculadora');
+            oculta.classList.add('oculto');
+            const ocultaLogo = document.getElementById('logo');
+            ocultaLogo.classList.add('oculto');
+            const mostra = document.getElementById('Voltar');
+            mostra.classList.remove('oculto');
+        }
+  
+
+        function mostrar(){
+          location.reload();
+        }
+
+        // Funções de cálculo das taxas aqui (mesmo código do exemplo anterior)
+        // Função para calcular a taxa efetiva de crédito à vista
+        var contador = 0;
+        var Mdr;
+        var taxa = new Array();
+        // Função para calcular a taxa efetiva de crédito parcelado
+        function calcularTaxaCredito(taxaMdrCreditoAvista,taxaMdrCredito2a6, taxaMdrCredito7a18, taxaAntecipacao) {
+            for (var i = 0; i < 18; i++) {
+               contador +=   1*i + 1; 
+                if (i == 0) {
+                    Mdr = taxaMdrCreditoAvista;
+                }
+                else {
+                    if (i >0 && i < 7) {
+                        Mdr = taxaMdrCredito2a6;
+
+                    }
+                    else {
+                        Mdr = taxaMdrCredito7a18;
+                    }
+                }
+
+                taxa[i] = ((100 - Mdr) / (i+1)) * ((taxaAntecipacao / 100) * contador) + Mdr;
+               
+            }
+            return taxa[i];
+        }
+
+    </script>
+</body>
+
+</html>
