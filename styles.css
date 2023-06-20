@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap');
 
 .corpo{
-    background-color: rgba(0, 168, 104, 1);
+    background:linear-gradient(to right, rgb(0, 92, 57),rgb(3, 195, 121) );
     color: white;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -93,7 +93,7 @@
     align-items: center;
 }
 .concorrencia{
-    background-color: rgb(192, 199, 145);
+     background:linear-gradient(to right, #68683f, rgb(192, 199, 145));
     color: black;
 }
 
