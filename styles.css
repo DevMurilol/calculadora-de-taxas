@@ -1,19 +1,89 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap');
 
-body {
+.corpo{
     background-color: rgba(0, 168, 104, 1);
     color: white;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
 }
+.taxa-concorrencia{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 1rem;
+}
+.taxa-concorrencia__botao:checked{
+    background-color: rgb(125, 255, 205);
 
-.cabecalho {
-    text-align: center;
-    padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: 700;
+}
+.taxa__botao-stone:checked{
+    background-color: #DAffff;
 }
 
+.taxa-concorrencia__botao::before,.taxa__botao-stone::before {
+    content: '';
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 2rem;
+    position: absolute;
+    box-shadow: inset 0px 4px 8px 5px rgba(0, 0, 0, 0.1);
+    transform: scale(1.1);
+
+}
+.taxa-concorrencia__botao::before{
+       background-color: #DAffff;
+}
+.taxa__botao-stone::before {
+    background-color:  rgb(180, 248, 191);
+    left: 1.5rem;
+}
+.taxa-concorrencia__botao:checked:before{
+    left: 1.5rem;
+    transition: .5s;
+    background-color:  rgb(180, 248, 191);
+}
+.taxa__botao-stone:checked:before{
+    left: 0;
+    background-color: #DAffff;
+}
+.taxa-concorrencia__titulo{
+    position: absolute;
+    top: 50%;
+    right:4rem;
+}
+.taxa-concorrencia__botao , .taxa__botao-stone{
+    width: 3rem;
+    height: 1.5rem;
+    appearance: none;
+    background-color: #FFFFFF;
+    border-radius: 1.5rem;
+    box-shadow: inset 0px 0px 16px 1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: .5s;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.taxa__botao-stone{
+    background-color: rgb(125, 255, 205);
+}
+.botaoComparar{
+    display: flex;
+}
+.cabecalho {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    color: #FFFFFF;
+    align-items: center;
+    justify-content:center;
+    border: 1px rgb(23, 95, 14) solid;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
 .calculadora {
     padding: 1rem 0 0 0 ;
     display: flex;
@@ -22,57 +92,90 @@ body {
     text-align: center;
     align-items: center;
 }
+.concorrencia{
+    background-color: rgb(192, 199, 145);
+    color: black;
+}
 
 label {
     padding-bottom: 1rem;
 }
 
-input {
-    width: 25%;
+.digitar-texto{
+    width: 2.5rem;
     border-radius: 1rem;
     border-color: black;
     padding: 0.5rem;
     box-shadow: 2px 8px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
 }
 
-.calculadora__botao {
-    width: 30%;
+.calculadora__botao {  
+    width: 8rem;
+    height: 3rem;
     border-radius: 1rem;
     padding: 0.5rem;
     box-shadow: 2px 6px 4px rgba(0, 0, 0, 0.3);
     font-weight: 700;
     font-size: 20px;
 }
-
+.container__botao{
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+}
 .oculto {
     display: none;
-}
-.resultados {
-    align-items: center;
-    justify-content: center;
 }
 
 .resultados__texto {
     background-color: white;
-    padding: 6px 3px;
     color: black;
     border-radius: 5px;
-    width: 110px;
-    display: flex;
-    text-align: center;
+    width: 100px;
     box-shadow: 8px 9px 6px rgba(0, 0, 0, 0.3);
-}
+    margin: 1px;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-around;
 
-#resultados {
+}
+.resultados__titulo{
+    font-weight: 700;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+.resultados-container{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+
+}
+#resultados , #resultadosConcorrencia {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
     justify-content: center;
-    align-items: first baseline;
-    padding: 0 25%;
-    margin-left: 8%; 
+    align-items: baseline;
     font-size: 14px;
-    margin-top: 1rem;
+}
+#resultadosConcorrencia{
+    display: none;
+}
+#botaoComparar{
+    display: flex;
+}
+#botaoCalcular{
+    display: block;
+}
+#botaoContinuar{
+    display: none;
+    margin-bottom: 1rem;
 }
 .rodape{
 display: flex;
