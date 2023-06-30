@@ -26,7 +26,7 @@ function calculadora() {
                 }
             }
             else {
-                if (j > 0 && j < 7) {
+                if (j > 0 && j < 6) {
                     if (i == 0) {
                         Mdr = taxaMdrCredito2a6;
                     }
