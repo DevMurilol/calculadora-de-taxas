@@ -1,0 +1,47 @@
+
+.container-semana{
+    width:60%;
+    margin: 0 auto;
+    padding: 10px 0;
+    font-size: 0.7rem;
+    background-color: #898121;
+    font-weight: 700;
+    border-radius: 0px 0px 20px 20px;
+
+}
+.calendario-titulo
+{
+    width:60%;
+    margin: 2rem auto 0 auto;
+    padding: 10px 0;
+    font-size: 1rem;
+    background-color: #E7B10A;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 20px 20px 0px 0px;
+
+}
+.dias-semana{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.dias-semana__botao{
+    display: none;
+}
+.dia{
+    padding: 0.3rem;
+    border-radius:100%;
+}
+
+.dias-semana__botao:checked ~ .dia {
+    background-color: #a2a378;
+
+}
+.resultados__titulo{
+    margin-top: 2rem;
+}
+.rodape{
+    margin-top: 2rem;
+}

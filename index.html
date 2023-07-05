@@ -8,78 +8,101 @@
     <title>Calculadora de Taxas</title>
     <link rel="stylesheet" href="./reset.css">
     <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <header class="cabecalho">
-    <h1>Calculadora de Taxas</h1>
+    <div class="cabecalho__container">
+        <span class="material-symbols-outlined menu-hamburguer" id="menuHamburguer" onclick="clickMenu()">menu</span>
+
+        <div class="cabecalho__titulo">
+            <h1>Calculadora de Taxas</h1>
+        </div>
+    </div>
+<ul class="itens-menu" id="itens">
+        <li><a href="./simulador.html" class="itens-menu__link">Simulador de vendas</a></li>
+        <li><a href="./antecipacao-programada.html" class="itens-menu__link">Calculadora Antecipação Programada</a><li>
+    </ul>
 </header>
 
 <body class="corpo" id="corpo">
-  <section id="taxa-concorrencia">
-     <div class="taxa-concorrencia">
-    <H2 class="taxa-concorrencia__titulo">Calcular taxa stone:</H2> 
-         <input class="taxa__botao-stone" id="taxa__botao-stone" onclick="mostraBotaoConcorrencia()" type="checkbox"><br>
     
-   </div>
-   <div class="taxa-concorrencia botaoComparar" id="botaoComparar" >
-    <H2 class="taxa-concorrencia__titulo">Comparar taxas:</H2> 
-         <input class="taxa-concorrencia__botao"  onclick="mostraBotaoCalcular()"type="checkbox"><br>
-   </div>
-  </section>
-   
-    <section class="calculadora" id="calculadora">
-        <label for="taxaMdrDebito">Taxa do Débito (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrDebito" step="0.01"><br>
+    <section id="taxa-concorrencia">
+        <div class="taxa-concorrencia">
+            <H2 class="taxa-concorrencia__titulo">Calcular taxa stone:</H2>
+            <input class="taxa__botao-stone" id="taxa__botao-stone" onclick="mostraBotaoConcorrencia()"
+                type="checkbox"><br>
 
-        <label for="taxaMdrCreditoAvista">MDR Crédito Avista (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrCreditoAvista" step="0.01"><br>
-
-        <label for="taxaMdrCredito2a6">MDR Crédito Parcelado 2x a 6x (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrCredito2a6" step="0.01"><br>
-
-        <label for="taxaMdrCredito7a18">MDR Crédito Parcelado 7x a 18x (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrCredito7a18" step="0.01"><br>
-
-        <label for="taxaAntecipacao">Taxa de Antecipação (%):</label>
-        <input class="digitar-texto" type="number" id="taxaAntecipacao" step="0.01"><br>
-        <div class="container__botao">
-            <button class="calculadora__botao container__botao__calcular" id="botaoCalcular" onclick="calculadora(),ocultar()">Calcular</button><br><br>
-            <button class="calculadora__botao container__botao__continuar" id="botaoContinuar" onclick="continuar()">Continuar</button><br><br>
         </div>
-        
+        <div class="taxa-concorrencia botaoComparar" id="botaoComparar">
+            <H2 class="taxa-concorrencia__titulo">Comparar taxas:</H2>
+            <input class="taxa-concorrencia__botao" onclick="mostraBotaoCalcular()" type="checkbox"><br>
+        </div>
     </section>
-    <section class="calculadora oculto" id="calculadoraConcorrencia">
+
+    <section class="calculadora" id="calculadora" onclick="escondeMenu()">
         <label for="taxaMdrDebito">Taxa do Débito (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrDebitoConcorrencia" step="0.01"><br>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrDebito" step="0.01"><br>
 
         <label for="taxaMdrCreditoAvista">MDR Crédito Avista (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrCreditoConcorrenciaAvista" step="0.01"><br>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrCreditoAvista" step="0.01"><br>
 
         <label for="taxaMdrCredito2a6">MDR Crédito Parcelado 2x a 6x (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrCreditoConcorrencia2a6" step="0.01"><br>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrCredito2a6" step="0.01"><br>
 
         <label for="taxaMdrCredito7a18">MDR Crédito Parcelado 7x a 18x (%):</label>
-        <input class="digitar-texto" type="number" id="taxaMdrCreditoConcorrencia7a18" step="0.01"><br>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrCredito7a18" step="0.01"><br>
 
         <label for="taxaAntecipacao">Taxa de Antecipação (%):</label>
-        <input class="digitar-texto" type="number" id="taxaAntecipacaoConcorrencia" step="0.01"><br>
+        <input class="digitar-texto" type="number"  placeholder="%" id="taxaAntecipacao" step="0.01"><br>
+        <div class="container__botao">
+            <button class="calculadora__botao container__botao__calcular" id="botaoCalcular"
+                onclick="calculadora(),ocultar()">Calcular</button><br><br>
+            <button class="calculadora__botao container__botao__continuar" id="botaoContinuar"
+                onclick="continuar()">Continuar</button><br><br>
+        </div>
+
+    </section>
+    <section class="calculadora oculto" id="calculadoraConcorrencia" onclick="escondeMenu()">
+        <label for="taxaMdrDebito">Taxa do Débito (%):</label>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrDebitoConcorrencia" step="0.01"><br>
+
+        <label for="taxaMdrCreditoAvista">MDR Crédito Avista (%):</label>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrCreditoConcorrenciaAvista" step="0.01"><br>
+
+        <label for="taxaMdrCredito2a6">MDR Crédito Parcelado 2x a 6x (%):</label>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrCreditoConcorrencia2a6" step="0.01"><br>
+
+        <label for="taxaMdrCredito7a18">MDR Crédito Parcelado 7x a 18x (%):</label>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrCreditoConcorrencia7a18" step="0.01"><br>
+
+        <label for="taxaAntecipacao">Taxa de Antecipação (%):</label>
+        <input class="digitar-texto" type="number" placeholder="%" id="taxaAntecipacaoConcorrencia" step="0.01"><br>
 
         <button class="calculadora__botao" onclick="calculadora(),ocultar()">Calcular</button><br><br>
     </section>
     <div class="resultados-container">
-       <section class="resultados">
-        <div id="resultados"></div>  
-    </section>
-    <section class="resultadosConcorrencia">
-        <div id="resultadosConcorrencia"></div>  
-    </section> 
+        <section class="resultados">
+            <div id="resultados"></div>
+        </section>
+        <section class="resultadosConcorrencia">
+            <div id="resultadosConcorrencia"></div>
+        </section>
     </div>
-    
-  <footer class="rodape">
-    <button class="calculadora__botao oculto" id="Voltar" onclick="mostrar()">Voltar</button><br><br>
-    <img class="logo" id="logo" src="./img/stone-logo.png" alt="Logo da STONE">
-  </footer>
+    <div class="logo__container">
+        <button class="calculadora__botao oculto" id="Voltar" onclick="mostrar()">Voltar</button><br><br>
+        <img class="logo" id="logo" src="./img/stone-logo.png" alt="Logo da STONE">
+    </div>
 
-    <script src="./js/calculadoraTaxas.js"></script>
+    <footer class="rodape">
+        <span class="rodape__texto">
+            Desenvolvido por Murilo
+        </span>
+        <a href="https://www.linkedin.com/in/murilo-freitas-de-souza-862a5121b/" target="_blank"><img
+                class="linkedin-logo" src="./img/linkedin-in.svg" alt="logo linkedin"></a>
+    </footer>
+
+    <script src="./js/main.js"></script>
 </body>
 
 </html>

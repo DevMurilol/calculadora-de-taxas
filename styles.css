@@ -1,27 +1,88 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap');
 
-.corpo{
-    background:linear-gradient(to right, rgb(0, 92, 57),rgb(3, 195, 121) );
+.corpo {
+    background: linear-gradient(to right, rgb(0, 92, 57), rgb(3, 195, 121));
     color: white;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
 }
-.taxa-concorrencia{
+
+.material-symbols-outlined {
+
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 700,
+        'GRAD' 0,
+        'opsz' 48
+}
+
+.cabecalho {
+    text-align: center;
+    padding: 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    color: #FFFFFF;
+    align-items: center;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.menu-hamburguer {
+    position: absolute;
+    left: 0;
+    margin: 0 1rem;
+    cursor: pointer;
+}
+#itens{
+    display: none;
+}
+.itens-menu {
+    font-size: 1rem;
+    flex-direction: column;
+    position: absolute;
+    top: 2.3rem;
+    align-items: baseline;
+    left: 0;
+    padding: 0.5rem;
+    background: linear-gradient(to right, rgb(0, 92, 57), rgb(3, 195, 121));
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
+
+}
+
+
+li {
+    text-align: center;
+    width: 100vw;
+    margin: 0.5rem 0;
+}
+.itens-menu__link{
+    text-decoration: none;
+    color: #FFF;
+}
+
+.taxa-concorrencia {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     margin: 1rem;
 }
-.taxa-concorrencia__botao:checked{
+
+.taxa-concorrencia__botao:checked {
     background-color: rgb(125, 255, 205);
 
 }
-.taxa__botao-stone:checked{
+
+.taxa__botao-stone:checked {
     background-color: #DAffff;
 }
 
-.taxa-concorrencia__botao::before,.taxa__botao-stone::before {
+.taxa-concorrencia__botao::before,
+.taxa__botao-stone::before {
     content: '';
     width: 1.5rem;
     height: 1.5rem;
@@ -31,28 +92,35 @@
     transform: scale(1.1);
 
 }
-.taxa-concorrencia__botao::before{
-       background-color: #DAffff;
+
+.taxa-concorrencia__botao::before {
+    background-color: #DAffff;
 }
+
 .taxa__botao-stone::before {
-    background-color:  rgb(180, 248, 191);
+    background-color: rgb(180, 248, 191);
     left: 1.5rem;
 }
-.taxa-concorrencia__botao:checked:before{
+
+.taxa-concorrencia__botao:checked:before {
     left: 1.5rem;
     transition: .5s;
-    background-color:  rgb(180, 248, 191);
+    background-color: rgb(180, 248, 191);
 }
-.taxa__botao-stone:checked:before{
+
+.taxa__botao-stone:checked:before {
     left: 0;
     background-color: #DAffff;
 }
-.taxa-concorrencia__titulo{
+
+.taxa-concorrencia__titulo {
     position: absolute;
     top: 50%;
-    right:4rem;
+    right: 4rem;
 }
-.taxa-concorrencia__botao , .taxa__botao-stone{
+
+.taxa-concorrencia__botao,
+.taxa__botao-stone {
     width: 3rem;
     height: 1.5rem;
     appearance: none;
@@ -65,43 +133,39 @@
     top: 0;
     right: 0;
 }
-.taxa__botao-stone{
+
+.taxa__botao-stone {
     background-color: rgb(125, 255, 205);
 }
-.botaoComparar{
+
+.botaoComparar {
     display: flex;
 }
-.cabecalho {
-    text-align: center;
-    padding: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    display: flex;
-    color: #FFFFFF;
-    align-items: center;
-    justify-content:center;
-    border: 1px rgb(23, 95, 14) solid;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
-    z-index: 2;
-}
+
 .calculadora {
-    padding: 1rem 0 0 0 ;
+    padding: 1rem 0 0 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
     align-items: center;
 }
-.concorrencia{
-     background:linear-gradient(to right, #68683f, rgb(192, 199, 145));
+
+.concorrencia {
+    background: linear-gradient(to right, #68683f, rgb(192, 199, 145));
     color: black;
+}
+
+.resultados-comparacao {
+    background: linear-gradient(to right, rgb(5, 204, 128), #2d2d2d, rgb(176, 182, 133));
+    color: #FFFFFF;
 }
 
 label {
     padding-bottom: 1rem;
 }
 
-.digitar-texto{
+.digitar-texto {
     width: 2.5rem;
     border-radius: 1rem;
     border-color: black;
@@ -110,7 +174,7 @@ label {
     text-align: center;
 }
 
-.calculadora__botao {  
+.calculadora__botao {
     width: 8rem;
     height: 3rem;
     border-radius: 1rem;
@@ -118,13 +182,16 @@ label {
     box-shadow: 2px 6px 4px rgba(0, 0, 0, 0.3);
     font-weight: 700;
     font-size: 20px;
+    cursor: pointer;
 }
-.container__botao{
+
+.container__botao {
     width: auto;
     display: flex;
     flex-direction: row;
-    justify-content:center;
+    justify-content: center;
 }
+
 .oculto {
     display: none;
 }
@@ -141,7 +208,8 @@ label {
     justify-content: space-around;
 
 }
-.resultados__titulo{
+
+.resultados__titulo {
     font-weight: 700;
     font-size: 2rem;
     display: flex;
@@ -150,13 +218,16 @@ label {
     margin: 0.5rem 0;
     width: 100%;
 }
-.resultados-container{
+
+.resultados-container {
     display: flex;
     gap: 1rem;
     justify-content: center;
 
 }
-#resultados , #resultadosConcorrencia {
+
+#resultados,
+#resultadosConcorrencia {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
@@ -164,28 +235,66 @@ label {
     align-items: baseline;
     font-size: 14px;
 }
-#resultadosConcorrencia{
+
+#resultadosConcorrencia {
     display: none;
 }
-#botaoComparar{
+
+#botaoComparar {
     display: flex;
 }
-#botaoCalcular{
+
+#botaoCalcular {
     display: block;
 }
-#botaoContinuar{
+
+#botaoContinuar {
     display: none;
     margin-bottom: 1rem;
 }
-.rodape{
-display: flex;
-justify-content: center;
-padding-bottom: 1rem ;
+
+.logo__container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+
 }
-.logo{
-    width:80%;
+
+.logo {
+    width: 250px;
     margin-top: auto;
     background-color: white;
     border-radius: 2rem;
     box-shadow: 8px 9px 6px rgba(0, 0, 0, 0.3);
+}
+
+.rodape {
+    background: linear-gradient(to right, #000, #2d2d2d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10%;
+    text-align: center;
+    padding: 1rem 20%;
+}
+
+.rodape__texto {
+    font-size: 0.8rem;
+    color: #FFF;
+}
+
+.rodape__texto:hover {
+    transform: scale(1.1);
+}
+
+.linkedin-logo:hover {
+    transform: scale(1.2);
+}
+
+.linkedin-logo {
+    width: 1.5rem;
+    display: flex;
+    filter: invert(1);
+    cursor: pointer;
+
 }
