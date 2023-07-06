@@ -143,7 +143,7 @@ function ocultar() {
     const oculta = document.getElementById('calculadora');
     oculta.classList.add('oculto');
     const ocultaLogo = document.getElementById('logo');
-    ocultaLogo.classList.add('oculto');
+     ocultaLogo.style.display = 'none';
     const mostra = document.getElementById('Voltar');
     mostra.classList.remove('oculto');
     const ocultaTaxa = document.getElementById('taxa-concorrencia');
