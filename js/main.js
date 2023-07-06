@@ -1,6 +1,6 @@
 
 function calculadora() {
-    var taxa = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]];
+    var taxa = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]];
     const taxaMdrDebito = parseFloat(document.getElementById('taxaMdrDebito').value);
     const taxaMdrCreditoAvista = parseFloat(document.getElementById('taxaMdrCreditoAvista').value);
     const taxaMdrCredito2a6 = parseFloat(document.getElementById('taxaMdrCredito2a6').value);
@@ -12,6 +12,7 @@ function calculadora() {
     const taxaMdrCreditoConcorrencia2a6 = parseFloat(document.getElementById('taxaMdrCreditoConcorrencia2a6').value);
     const taxaMdrCreditoConcorrencia7a18 = parseFloat(document.getElementById('taxaMdrCreditoConcorrencia7a18').value);
     const taxaAntecipacaoConcorrencia = parseFloat(document.getElementById('taxaAntecipacaoConcorrencia').value);
+    const taxaefetivaDebito = parseFloat(document.getElementById('taxaEfetivaDebito').value);
 
     for (var i = 0; i < 2; i++) {
         var contador = 0;
@@ -56,7 +57,10 @@ function calculadora() {
         }
 
     }
-
+for(var k = 0; k<18; k++){
+    
+    taxa[2][k] = parseFloat(document.getElementById('taxaEfetiva'+(k+1)+'x').value);
+}
     const resultadosDiv = document.getElementById('resultados');
     resultadosDiv.innerHTML = `
 <h2 class="resultados__titulo"> Stone </h2>
@@ -80,30 +84,59 @@ function calculadora() {
 <p class="resultados__texto">17x: ${taxa[0][16].toFixed(2)}%</p> 
 <p class="resultados__texto">18x: ${taxa[0][17].toFixed(2)}%</p> 
 `;
-
     const resultadosConcorrenciaDiv = document.getElementById('resultadosConcorrencia');
+    const logoStone = document.getElementById('logo');
+
+if(logoStone.style.display == 'none'){
     resultadosConcorrenciaDiv.innerHTML = `
-<h2 class="resultados__titulo"> Outra </h2>
-<p class="resultados__texto">Débito: ${taxaMdrDebitoConcorrencia.toFixed(2)}%</p>
-<p class="resultados__texto">1x: ${taxa[1][0].toFixed(2)}%</p>
-<p class="resultados__texto">2x: ${taxa[1][1].toFixed(2)}%</p>
-<p class="resultados__texto">3x: ${taxa[1][2].toFixed(2)}%</p>
-<p class="resultados__texto">4x: ${taxa[1][3].toFixed(2)}%</p>
-<p class="resultados__texto">5x: ${taxa[1][4].toFixed(2)}%</p>
-<p class="resultados__texto">6x: ${taxa[1][5].toFixed(2)}%</p>
-<p class="resultados__texto">7x: ${taxa[1][6].toFixed(2)}%</p>
-<p class="resultados__texto">8x: ${taxa[1][7].toFixed(2)}%</p>
-<p class="resultados__texto">9x: ${taxa[1][8].toFixed(2)}%</p>
-<p class="resultados__texto">10x: ${taxa[1][9].toFixed(2)}%</p>
-<p class="resultados__texto">11x: ${taxa[1][10].toFixed(2)}%</p>
-<p class="resultados__texto">12x: ${taxa[1][11].toFixed(2)}%</p>
-<p class="resultados__texto">13x: ${taxa[1][12].toFixed(2)}%</p>
-<p class="resultados__texto">14x: ${taxa[1][13].toFixed(2)}%</p>
-<p class="resultados__texto">15x: ${taxa[1][14].toFixed(2)}%</p>
-<p class="resultados__texto">16x: ${taxa[1][15].toFixed(2)}%</p>
-<p class="resultados__texto">17x: ${taxa[1][16].toFixed(2)}%</p> 
-<p class="resultados__texto">18x: ${taxa[1][17].toFixed(2)}%</p> 
-`;
+    <h2 class="resultados__titulo"> Outra </h2>
+    <p class="resultados__texto">Débito: ${taxaefetivaDebito.toFixed(2)}%</p>
+    <p class="resultados__texto">1x: ${taxa[2][0].toFixed(2)}%</p>
+    <p class="resultados__texto">2x: ${taxa[2][1].toFixed(2)}%</p>
+    <p class="resultados__texto">3x: ${taxa[2][2].toFixed(2)}%</p>
+    <p class="resultados__texto">4x: ${taxa[2][3].toFixed(2)}%</p>
+    <p class="resultados__texto">5x: ${taxa[2][4].toFixed(2)}%</p>
+    <p class="resultados__texto">6x: ${taxa[2][5].toFixed(2)}%</p>
+    <p class="resultados__texto">7x: ${taxa[2][6].toFixed(2)}%</p>
+    <p class="resultados__texto">8x: ${taxa[2][7].toFixed(2)}%</p>
+    <p class="resultados__texto">9x: ${taxa[2][8].toFixed(2)}%</p>
+    <p class="resultados__texto">10x: ${taxa[2][9].toFixed(2)}%</p>
+    <p class="resultados__texto">11x: ${taxa[2][10].toFixed(2)}%</p>
+    <p class="resultados__texto">12x: ${taxa[2][11].toFixed(2)}%</p>
+    <p class="resultados__texto">13x: ${taxa[2][12].toFixed(2)}%</p>
+    <p class="resultados__texto">14x: ${taxa[2][13].toFixed(2)}%</p>
+    <p class="resultados__texto">15x: ${taxa[2][14].toFixed(2)}%</p>
+    <p class="resultados__texto">16x: ${taxa[2][15].toFixed(2)}%</p>
+    <p class="resultados__texto">17x: ${taxa[2][16].toFixed(2)}%</p> 
+    <p class="resultados__texto">18x: ${taxa[2][17].toFixed(2)}%</p> 
+    `
+
+}
+else{
+    resultadosConcorrenciaDiv.innerHTML = `
+    <h2 class="resultados__titulo"> Outra </h2>
+    <p class="resultados__texto">Débito: ${taxaMdrDebitoConcorrencia.toFixed(2)}%</p>
+    <p class="resultados__texto">1x: ${taxa[1][0].toFixed(2)}%</p>
+    <p class="resultados__texto">2x: ${taxa[1][1].toFixed(2)}%</p>
+    <p class="resultados__texto">3x: ${taxa[1][2].toFixed(2)}%</p>
+    <p class="resultados__texto">4x: ${taxa[1][3].toFixed(2)}%</p>
+    <p class="resultados__texto">5x: ${taxa[1][4].toFixed(2)}%</p>
+    <p class="resultados__texto">6x: ${taxa[1][5].toFixed(2)}%</p>
+    <p class="resultados__texto">7x: ${taxa[1][6].toFixed(2)}%</p>
+    <p class="resultados__texto">8x: ${taxa[1][7].toFixed(2)}%</p>
+    <p class="resultados__texto">9x: ${taxa[1][8].toFixed(2)}%</p>
+    <p class="resultados__texto">10x: ${taxa[1][9].toFixed(2)}%</p>
+    <p class="resultados__texto">11x: ${taxa[1][10].toFixed(2)}%</p>
+    <p class="resultados__texto">12x: ${taxa[1][11].toFixed(2)}%</p>
+    <p class="resultados__texto">13x: ${taxa[1][12].toFixed(2)}%</p>
+    <p class="resultados__texto">14x: ${taxa[1][13].toFixed(2)}%</p>
+    <p class="resultados__texto">15x: ${taxa[1][14].toFixed(2)}%</p>
+    <p class="resultados__texto">16x: ${taxa[1][15].toFixed(2)}%</p>
+    <p class="resultados__texto">17x: ${taxa[1][16].toFixed(2)}%</p> 
+    <p class="resultados__texto">18x: ${taxa[1][17].toFixed(2)}%</p> 
+    `;
+}
+   
 }
 
 function ocultar() {
@@ -116,7 +149,9 @@ function ocultar() {
     const ocultaTaxa = document.getElementById('taxa-concorrencia');
     ocultaTaxa.classList.add('oculto');
     const ocultaConcorrencia = document.getElementById('calculadoraConcorrencia');
-    ocultaConcorrencia.classList.add('oculto');
+    ocultaConcorrencia.style.display = 'none';
+    const calculadoraContainer = document.getElementById('taxaEfetivaConcorrencia');
+    calculadoraContainer.style.display = 'none';
 }
 
 function mostrar() {
@@ -168,6 +203,7 @@ function mostraBotaoCalcular() {
     }
 }
 function continuar() {
+    
     const oculta = document.getElementById('calculadora');
     oculta.classList.add('oculto');
     const mostra = document.getElementById('calculadoraConcorrencia');
@@ -176,8 +212,13 @@ function continuar() {
     corpo.classList.add('concorrencia');
     const itens = document.getElementById('itens');
     itens.classList.add('concorrencia')
-    const ocultaTaxa = document.getElementById('taxa-concorrencia');
-    ocultaTaxa.classList.add('oculto');
+    const botaoStone = document.getElementById('taxaStone');
+    botaoStone.style.display = "none";
+    const botaoComparar = document.getElementById('botaoComparar');
+    botaoComparar.style.display = "none";
+    const botaoTaxaEfetiva = document.getElementById('botaoTaxaEfetiva');
+    botaoTaxaEfetiva.style.display = 'flex'
+
 
 }
 
@@ -204,12 +245,6 @@ function escondeMenu() {
         itens.style.display = "none"
         menu.style.color = "#FFFFFF"
     }
-}
-function calcularProgramada() {
-    const resultados = document.getElementById('resultadosAntecipacaoProgramada')
-    var d = document.getElementById('dataVenda').value;
-    var [ano, mes, dia] = d.split('-').map(Number);
-    resultados.innerHTML = '<p>Ano escolhido: ' + ano + '</p> <br>' + '<p> Mês escolhido: ' + mes + '</p> <br>' + '<p> Dia escolhido: ' + dia + '</p> <br>';
 }
 function calcularTaxaProgramada() {
     const resultados = document.getElementById('resultadosAntecipacaoProgramada')
@@ -338,4 +373,21 @@ function simular() {
     const resultados = document.getElementById('resultadosSimulador')
     const valorCobrado = (valorReceber/ (1 - taxaPraticada/100));
     resultados.innerHTML ='Valor a ser Cobrado: ' + valorCobrado.toFixed(2) + ' Reais';
+}
+
+function mostraTaxaEfetiva(){
+    const calculadoraContainer = document.getElementById('calculadoraConcorrencia');
+    const taxaEfetivaConcorrencia = document.getElementById('taxaEfetivaConcorrencia');
+    const logoStone = document.getElementById('logo');
+    if (calculadoraContainer.style.display == 'none'){
+        calculadoraContainer.style.display = 'flex';
+        taxaEfetivaConcorrencia.style.display = 'none';
+        logoStone.style.display = 'block';
+    }
+    else{
+        calculadoraContainer.style.display = 'none';
+        taxaEfetivaConcorrencia.style.display = 'flex';
+        logoStone.style.display = 'none';
+    }
+    
 }

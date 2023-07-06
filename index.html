@@ -28,7 +28,8 @@
 <body class="corpo" id="corpo">
     
     <section id="taxa-concorrencia">
-        <div class="taxa-concorrencia">
+        
+        <div class="taxa-concorrencia" id="taxaStone" >
             <H2 class="taxa-concorrencia__titulo">Calcular taxa stone:</H2>
             <input class="taxa__botao-stone" id="taxa__botao-stone" onclick="mostraBotaoConcorrencia()"
                 type="checkbox"><br>
@@ -37,6 +38,10 @@
         <div class="taxa-concorrencia botaoComparar" id="botaoComparar">
             <H2 class="taxa-concorrencia__titulo">Comparar taxas:</H2>
             <input class="taxa-concorrencia__botao" onclick="mostraBotaoCalcular()" type="checkbox"><br>
+        </div>
+        <div class="taxa-concorrencia botaoComparar" id="botaoTaxaEfetiva">
+            <H2 class="taxa-concorrencia__titulo">Usar taxa efetiva:</H2>
+            <input class="taxa-concorrencia__botao" onclick="mostraTaxaEfetiva()" type="checkbox"><br>
         </div>
     </section>
 
@@ -80,6 +85,28 @@
         <input class="digitar-texto" type="number" placeholder="%" id="taxaAntecipacaoConcorrencia" step="0.01"><br>
 
         <button class="calculadora__botao" onclick="calculadora(),ocultar()">Calcular</button><br><br>
+    </section>
+    <section class="taxa-efetiva" id="taxaEfetivaConcorrencia">
+<p class="resultados__texto">Débito: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetivaDebito" step="0.01"></p>
+<p class="resultados__texto">1x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva1x" step="0.01"> </p>
+<p class="resultados__texto">2x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva2x" step="0.01"></p>
+<p class="resultados__texto">3x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva3x" step="0.01"></p>
+<p class="resultados__texto">4x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva4x" step="0.01"></p>
+<p class="resultados__texto">5x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva5x" step="0.01"></p>
+<p class="resultados__texto">6x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva6x" step="0.01"></p>
+<p class="resultados__texto">7x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva7x" step="0.01"></p>
+<p class="resultados__texto">8x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva8x" step="0.01"></p>
+<p class="resultados__texto">9x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva9x" step="0.01"></p>
+<p class="resultados__texto">10x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva10x" step="0.01"></p>
+<p class="resultados__texto">11x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva11x" step="0.01"></p>
+<p class="resultados__texto">12x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva12x" step="0.01"></p>
+<p class="resultados__texto">13x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva13x" step="0.01"></p>
+<p class="resultados__texto">14x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva14x" step="0.01"></p>
+<p class="resultados__texto">15x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva15x" step="0.01"></p>
+<p class="resultados__texto">16x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva16x" step="0.01"></p>
+<p class="resultados__texto">17x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva17x" step="0.01"></p> 
+<p class="resultados__texto">18x: <input class="digitar-taxa-efetiva" type="number" placeholder="%" id="taxaEfetiva18x" step="0.01"></p> 
+<button class="calculadora__botao" onclick="calculadora(),ocultar()">Calcular</button><br><br>
     </section>
     <div class="resultados-container">
         <section class="resultados">
