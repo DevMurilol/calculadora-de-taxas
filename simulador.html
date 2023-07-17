@@ -26,12 +26,25 @@
 </header>
 
 <body class="corpo" id="corpo">
+    <div class="taxa-concorrencia" id="taxaStone" >
+        <H2 class="taxa-concorrencia__titulo">Calcular taxa da venda:</H2>
+        <input class="taxa-concorrencia__botao" id="taxa__botao-stone" onclick="mudaSimulacao()"
+            type="checkbox"><br>
+    </div>
     <section class="calculadora" id="simuladorDeVendas" onclick="escondeMenu()">
-        <label for="taxaMdrDebito">Taxa praticada na transação (%):</label>
+        <label for="taxaPraticada">Taxa praticada na transação (%):</label>
         <input class="digitar-texto-simulador" placeholder="%" type="number" id="taxaPraticada" step="0.01"><br>
 
         <label for="taxaMdrCreditoAvista">Valor que deseja receber:</label>
         <input class="digitar-texto-simulador" placeholder="R$" type="number" id="valorReceber" step="0.01"><br>
+        <button class="calculadora__botao" onclick="simular()">Calcular</button><br><br>
+    </section>
+    <section class="calculadora" id="simuladorDeTaxaAplicada" onclick="escondeMenu()">
+        <label for="valorRecebido">Valor recebido na venda:</label>
+        <input class="digitar-texto-simulador" placeholder="R$" type="number" id="valorRecebido" step="0.01"><br>
+
+        <label for="valorCobrado">Valor cobrado na venda:</label>
+        <input class="digitar-texto-simulador" placeholder="R$" type="number" id="valorCobrado" step="0.01"><br>
         <button class="calculadora__botao" onclick="simular()">Calcular</button><br><br>
     </section>
     <section class="resultados" onclick="escondeMenu()">

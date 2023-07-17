@@ -272,7 +272,13 @@ label {
 #botaoTaxaEfetiva{
     display: none;
 }
-
+.digitar-texto-simulador{
+    border-radius: 1rem;
+    border-color: black;
+    padding: 0.2rem;
+    box-shadow: 2px 8px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
 .logo__container {
     display: flex;
     justify-content: center;

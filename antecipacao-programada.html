@@ -26,6 +26,10 @@
 </header>
 
 <body class="corpo" id="corpo" >
+    <div class="taxa-concorrencia" id="botaoTaxaMedia">
+        <H2 class="taxa-concorrencia__titulo">Calcular taxa média:</H2>
+        <input class="taxa-concorrencia__botao" onclick="mostraCalculadoraTaxaMedia()" type="checkbox"><br>
+    </div>
     <div>
         <h2 class="calendario-titulo">Selecione a data para antecipação:</h2>
         <div class="container-semana">
@@ -106,7 +110,7 @@
             </ul>
         </div>
     </div>
-    <section class="calculadora" id="calculadora" onclick="escondeMenu()">
+    <section class="calculadora" id="calculadoraAntecipacaoProgramada" onclick="escondeMenu()">
         <label for="taxaMdrDebito">Taxa do Débito (%):</label>
         <input class="digitar-texto" type="number" placeholder="%" id="taxaMdrDebito" step="0.01"><br>
 
@@ -121,19 +125,15 @@
 
         <label for="taxaAntecipacao">Taxa de Antecipação (%):</label>
         <input class="digitar-texto" type="number" placeholder="%" id="taxaAntecipacao" step="0.01"><br>
-        <label for="taxaMdrCreditoAvista">Data da venda:</label>
+        <label for="dataVenda" id="dataVendaLabel">Data da venda:</label>
         <input class="digitar-texto-simulador" placeholder="DD/MM/AA" type="date" id="dataVenda"><br>
-        <div class="container__botao">
-
-
-            <button class="calculadora__botao container__botao__calcular" id="botaoCalcular"
-                onclick="calcularTaxaProgramada()">Calcular</button><br><br>
-        </div>
-
     </section>
+    <div class="container__botao botao__programada">
 
 
-
+        <button class="calculadora__botao container__botao__calcular" id="botaoCalcular"
+            onclick="calcularTaxaProgramada()">Calcular</button><br><br>
+    </div>
     <div class="resultados-container">
     <section class="resultados">
         <h2 id="resultadosAntecipacaoProgramada" class="resultados-antecipacao"></h2>

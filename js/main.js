@@ -10,7 +10,8 @@ function calculadora() {
     const taxaMdrDebitoConcorrencia = parseFloat(document.getElementById('taxaMdrDebitoConcorrencia').value);
     const taxaMdrCreditoConcorrenciaAvista = parseFloat(document.getElementById('taxaMdrCreditoConcorrenciaAvista').value);
     const taxaMdrCreditoConcorrencia2a6 = parseFloat(document.getElementById('taxaMdrCreditoConcorrencia2a6').value);
-    const taxaMdrCreditoConcorrencia7a18 = parseFloat(document.getElementById('taxaMdrCreditoConcorrencia7a18').value);
+    const taxaMdrCreditoConcorrencia7a12 = parseFloat(document.getElementById('taxaMdrCreditoConcorrencia7a12').value);
+    const taxaMdrCreditoConcorrencia12a18 = parseFloat(document.getElementById('taxaMdrCreditoConcorrencia12a18').value);
     const taxaAntecipacaoConcorrencia = parseFloat(document.getElementById('taxaAntecipacaoConcorrencia').value);
     const taxaefetivaDebito = parseFloat(document.getElementById('taxaEfetivaDebito').value);
 
@@ -40,8 +41,15 @@ function calculadora() {
                         Mdr = taxaMdrCredito7a18;
                     }
                     else {
-                        Mdr = taxaMdrCreditoConcorrencia7a18;
+                        if (j <= 11) {
+                            Mdr = taxaMdrCreditoConcorrencia7a12;
+                        }
+                        else{
+                            Mdr = taxaMdrCreditoConcorrencia12a18;
+                        }
+
                     }
+
                 }
             }
             if (i == 0) {
@@ -57,10 +65,10 @@ function calculadora() {
         }
 
     }
-for(var k = 0; k<18; k++){
-    
-    taxa[2][k] = parseFloat(document.getElementById('taxaEfetiva'+(k+1)+'x').value);
-}
+    for (var k = 0; k < 18; k++) {
+
+        taxa[2][k] = parseFloat(document.getElementById('taxaEfetiva' + (k + 1) + 'x').value);
+    }
     const resultadosDiv = document.getElementById('resultados');
     resultadosDiv.innerHTML = `
 <h2 class="resultados__titulo"> Stone </h2>
@@ -87,8 +95,8 @@ for(var k = 0; k<18; k++){
     const resultadosConcorrenciaDiv = document.getElementById('resultadosConcorrencia');
     const logoStone = document.getElementById('logo');
 
-if(logoStone.style.display == 'none'){
-    resultadosConcorrenciaDiv.innerHTML = `
+    if (logoStone.style.display == 'none') {
+        resultadosConcorrenciaDiv.innerHTML = `
     <h2 class="resultados__titulo"> Outra </h2>
     <p class="resultados__texto">Débito: ${taxaefetivaDebito.toFixed(2)}%</p>
     <p class="resultados__texto">1x: ${taxa[2][0].toFixed(2)}%</p>
@@ -111,9 +119,9 @@ if(logoStone.style.display == 'none'){
     <p class="resultados__texto">18x: ${taxa[2][17].toFixed(2)}%</p> 
     `
 
-}
-else{
-    resultadosConcorrenciaDiv.innerHTML = `
+    }
+    else {
+        resultadosConcorrenciaDiv.innerHTML = `
     <h2 class="resultados__titulo"> Outra </h2>
     <p class="resultados__texto">Débito: ${taxaMdrDebitoConcorrencia.toFixed(2)}%</p>
     <p class="resultados__texto">1x: ${taxa[1][0].toFixed(2)}%</p>
@@ -135,15 +143,15 @@ else{
     <p class="resultados__texto">17x: ${taxa[1][16].toFixed(2)}%</p> 
     <p class="resultados__texto">18x: ${taxa[1][17].toFixed(2)}%</p> 
     `;
-}
-   
+    }
+
 }
 
 function ocultar() {
     const oculta = document.getElementById('calculadora');
     oculta.classList.add('oculto');
     const ocultaLogo = document.getElementById('logo');
-     ocultaLogo.style.display = 'none';
+    ocultaLogo.style.display = 'none';
     const mostra = document.getElementById('Voltar');
     mostra.classList.remove('oculto');
     const ocultaTaxa = document.getElementById('taxa-concorrencia');
@@ -203,7 +211,7 @@ function mostraBotaoCalcular() {
     }
 }
 function continuar() {
-    
+
     const oculta = document.getElementById('calculadora');
     oculta.classList.add('oculto');
     const mostra = document.getElementById('calculadoraConcorrencia');
@@ -226,11 +234,11 @@ function clickMenu() {
     const itens = document.getElementById('itens');
     const menu = document.getElementById('menuHamburguer')
 
-    if (itens.style.display == "block"){
+    if (itens.style.display == "block") {
         itens.style.display = "none"
         menu.style.color = "#FFFFFF"
     }
-    else{
+    else {
         itens.style.display = "block";
         menu.style.color = "#000000"
 
@@ -241,7 +249,7 @@ function escondeMenu() {
     const itens = document.getElementById('itens');
     const menu = document.getElementById('menuHamburguer')
 
-    if (itens.style.display == "block"){
+    if (itens.style.display == "block") {
         itens.style.display = "none"
         menu.style.color = "#FFFFFF"
     }
@@ -249,13 +257,22 @@ function escondeMenu() {
 function calcularTaxaProgramada() {
     const resultados = document.getElementById('resultadosAntecipacaoProgramada')
     const contadorChecked = document.querySelectorAll('.dias-semana__botao:checked').length;
-    var ravResultante, diaProporcional;
+    var ravResultante = 0;
+    var diaProporcional;
     var datasProgramadas = new Array(contadorChecked);
     var d = document.getElementById('dataVenda').value;
     var [ano, mes, dia] = d.split('-').map(Number);
     var contador = 0;
     const taxaRav = parseFloat(document.getElementById('taxaAntecipacao').value);
+    const data = document.getElementById('dataVenda');
     resultados.innerHTML = '';
+    var taxa = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const taxaMdrDebito = parseFloat(document.getElementById('taxaMdrDebito').value);
+    const taxaMdrCreditoAvista = parseFloat(document.getElementById('taxaMdrCreditoAvista').value);
+    const taxaMdrCredito2a6 = parseFloat(document.getElementById('taxaMdrCredito2a6').value);
+    const taxaMdrCredito7a18 = parseFloat(document.getElementById('taxaMdrCredito7a18').value);
+
+
     for (var i = 1; i < 31; i++) {
 
         if (document.getElementById('diasSemana' + i + '').checked) {
@@ -263,31 +280,50 @@ function calcularTaxaProgramada() {
             contador++;
         }
     }
+    if (data.style.display == 'none') {
 
-    for (let j = 0; j <= contadorChecked - 1; j++) {
-        if (dia < datasProgramadas[j]) {
-            diaProporcional = 31 - (datasProgramadas[j] - dia);
-            if (diaProporcional < 0) {
-                diaProporcional = 0;
+        for (var a = 1; a < 31; a++) {
+            var diaCont = a;
+            for (var j = 0; j <= contadorChecked - 1; j++) {
+                if (diaCont < datasProgramadas[j]) {
+                    diaProporcional = 31 - (datasProgramadas[j] - diaCont);
+                    if (diaProporcional < 0) {
+                        diaProporcional = 0;
+                    }
+                    ravResultante = ((taxaRav / 30) * (diaProporcional)) / 30 + ravResultante;
+                    j = contadorChecked;
+                }
+
+
             }
-            ravResultante = (taxaRav / 30) * (diaProporcional);
-            j = contadorChecked;
+            if (diaCont >= datasProgramadas[contadorChecked - 1]) {
+                diaProporcional = 30 - (30 - diaCont + datasProgramadas[0]);
+                if (diaProporcional < 0) {
+                    diaProporcional = 0;
+                }
+                ravResultante = ((taxaRav / 30) * diaProporcional) / 30 + ravResultante;
+
+
+            }
+
         }
-
-
     }
-    if (dia >= datasProgramadas[contadorChecked - 1]) {
-        if (mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12) {
-            diaProporcional = 30 - (31 - dia + datasProgramadas[0]);
-            if (diaProporcional < 0) {
-                diaProporcional = 0;
+    else {
+        for (let j = 0; j <= contadorChecked - 1; j++) {
+            if (dia < datasProgramadas[j]) {
+                diaProporcional = 31 - (datasProgramadas[j] - dia);
+                if (diaProporcional < 0) {
+                    diaProporcional = 0;
+                }
+                ravResultante = (taxaRav / 30) * (diaProporcional);
+                j = contadorChecked;
             }
-            ravResultante = (taxaRav / 30) * diaProporcional;
+
 
         }
-        else {
-            if (ano % 4 == 0 && mes == 1) {
-                diaProporcional = 30 - (29 - dia + datasProgramadas[0]);
+        if (dia >= datasProgramadas[contadorChecked - 1]) {
+            if (mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12) {
+                diaProporcional = 30 - (31 - dia + datasProgramadas[0]);
                 if (diaProporcional < 0) {
                     diaProporcional = 0;
                 }
@@ -295,34 +331,38 @@ function calcularTaxaProgramada() {
 
             }
             else {
-                if (ano % 4 !== 0 && mes == 1) {
-                    diaProporcional = 30 - (28 - dia + datasProgramadas[0]);
+                if (ano % 4 == 0 && mes == 1) {
+                    diaProporcional = 30 - (29 - dia + datasProgramadas[0]);
                     if (diaProporcional < 0) {
                         diaProporcional = 0;
                     }
                     ravResultante = (taxaRav / 30) * diaProporcional;
-                }
-            }
-            if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
-                diaProporcional = 30 - (30 - dia + datasProgramadas[0]);
-                if (diaProporcional < 0) {
-                    diaProporcional = 0;
-                }
-                ravResultante = (taxaRav / 30) * diaProporcional;
 
+                }
+                else {
+                    if (ano % 4 !== 0 && mes == 1) {
+                        diaProporcional = 30 - (28 - dia + datasProgramadas[0]);
+                        if (diaProporcional < 0) {
+                            diaProporcional = 0;
+                        }
+                        ravResultante = (taxaRav / 30) * diaProporcional;
+                    }
+                }
+                if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+                    diaProporcional = 30 - (30 - dia + datasProgramadas[0]);
+                    if (diaProporcional < 0) {
+                        diaProporcional = 0;
+                    }
+                    ravResultante = (taxaRav / 30) * diaProporcional;
+
+                }
             }
         }
+
     }
-
-    var taxa = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]];
-    const taxaMdrDebito = parseFloat(document.getElementById('taxaMdrDebito').value);
-    const taxaMdrCreditoAvista = parseFloat(document.getElementById('taxaMdrCreditoAvista').value);
-    const taxaMdrCredito2a6 = parseFloat(document.getElementById('taxaMdrCredito2a6').value);
-    const taxaMdrCredito7a18 = parseFloat(document.getElementById('taxaMdrCredito7a18').value);
-    var somatorio = 0
-
+    var somatorio = 0;
     for (var l = 0; l < 18; l++) {
-        somatorio += ravResultante + taxaRav*l
+        somatorio += (ravResultante) + taxaRav * l
         if (l == 0) {
             Mdr = taxaMdrCreditoAvista;
 
@@ -339,10 +379,12 @@ function calcularTaxaProgramada() {
             }
 
         }
-        taxa[l] = ((100 - Mdr) / (l + 1))*somatorio/100 + Mdr;
+        taxa[l] = ((100 - Mdr) / (l + 1)) * somatorio / 100 + Mdr;
 
 
     }
+
+
 
     resultados.innerHTML = `
 <h2 class="resultados__titulo"> Stone </h2>
@@ -367,27 +409,61 @@ function calcularTaxaProgramada() {
 <p class="resultados__texto">18x: ${taxa[17].toFixed(2)}%</p> 
 `;
 }
+function mudaSimulacao(){
+    const simuladorTaxaAplicada= document.querySelector('#simuladorDeTaxaAplicada');
+    const simuladorDeVendas= document.querySelector('#simuladorDeVendas');
+    const resultados = document.getElementById('resultadosSimulador');
+    resultados.innerHTML = '';
+    if(simuladorDeVendas.style.display == 'none'){
+        simuladorTaxaAplicada.style.display = 'none';
+        simuladorDeVendas.style.display = 'flex';
+    } else{
+        simuladorTaxaAplicada.style.display = 'flex';
+        simuladorDeVendas.style.display = 'none';
+    }
+}
 function simular() {
     const taxaPraticada = document.getElementById('taxaPraticada').value;
     const valorReceber = document.getElementById('valorReceber').value;
-    const resultados = document.getElementById('resultadosSimulador')
-    const valorCobrado = (valorReceber/ (1 - taxaPraticada/100));
-    resultados.innerHTML ='Valor a ser Cobrado: ' + valorCobrado.toFixed(2) + ' Reais';
+    const valorRecebido = document.querySelector('#valorRecebido').value;
+    const valorCobrado = document.querySelector('#valorCobrado').value;
+    const resultados = document.getElementById('resultadosSimulador');
+    const valorAplicado = (valorReceber / (1 - taxaPraticada / 100));
+    const taxaAplicada = ( valorCobrado - valorRecebido)*100/valorCobrado;
+    if(document.querySelector('#simuladorDeTaxaAplicada').style.display == 'none'){
+         resultados.innerHTML = 'Valor a ser Cobrado: ' + valorAplicado.toFixed(2) + ' Reais';
+    }
+    else{
+        resultados.innerHTML = 'Taxa Aplicada foi de: ' + taxaAplicada.toFixed(2) + '%';
+    }
+    
 }
 
-function mostraTaxaEfetiva(){
+function mostraTaxaEfetiva() {
     const calculadoraContainer = document.getElementById('calculadoraConcorrencia');
     const taxaEfetivaConcorrencia = document.getElementById('taxaEfetivaConcorrencia');
     const logoStone = document.getElementById('logo');
-    if (calculadoraContainer.style.display == 'none'){
+    if (calculadoraContainer.style.display == 'none') {
         calculadoraContainer.style.display = 'flex';
         taxaEfetivaConcorrencia.style.display = 'none';
         logoStone.style.display = 'block';
     }
-    else{
+    else {
         calculadoraContainer.style.display = 'none';
         taxaEfetivaConcorrencia.style.display = 'flex';
         logoStone.style.display = 'none';
     }
-    
+
+}
+function mostraCalculadoraTaxaMedia() {
+    const data = document.getElementById('dataVenda');
+    const dataLabel = document.getElementById('dataVendaLabel');
+    if (data.style.display == 'none') {
+        data.style.display = 'flex';
+        dataLabel.style.display = 'flex';
+    }
+    else {
+        data.style.display = 'none';
+        dataLabel.style.display = 'none';
+    }
 }

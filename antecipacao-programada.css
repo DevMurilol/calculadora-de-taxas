@@ -40,8 +40,11 @@
 
 }
 .resultados__titulo{
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
-.rodape{
-    margin-top: 2rem;
+.resultados-container{
+margin-bottom: 2rem;
+}
+.botao__programada{
+    margin: 2rem 0 1rem 0;
 }
