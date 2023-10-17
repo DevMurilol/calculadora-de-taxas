@@ -44,7 +44,6 @@ function calculadora(btn) {
     taxaMdrDebito[i] = parseFloat(
       document.getElementById("taxaMdrDebito-" + i).value
     );
-    console.log(taxaMdrDebito[i]);
     taxaMdrCreditoAvista[i] = parseFloat(
       document.getElementById("taxaMdrCreditoAvista-" + i).value
     );

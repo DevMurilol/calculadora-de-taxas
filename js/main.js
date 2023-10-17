@@ -12,7 +12,11 @@ const taxaStoneBtn = document.querySelector('#taxa__botao-stone');
 const taxaEfetivaConcorrencia = document.getElementById(
     "taxaEfetivaConcorrencia"
   );
-const taxaEfetivaBtn = document.querySelector('#taxaEfetivaBtn')
+const taxaEfetivaBtn = document.querySelector('#taxaEfetivaBtn');
+const inputNomeConcorrencia = document.querySelector("#nomeConcorrencia"); 
+let nomeConcorrencia =  document.querySelector("#nomeConcorrencia");
+
+
 
 function ocultarCalculadora() {
   const calculadora = document.getElementById("calculadora");
@@ -35,6 +39,7 @@ function mostrar() {
 }
 
 function mostraBotaoConcorrencia() {
+   
     taxaStoneBtn.addEventListener('click', () => {
         if (taxaStoneBtn.checked == false) {
             botaoComparar.style.display = "flex";
@@ -47,6 +52,7 @@ function mostraBotaoConcorrencia() {
             botaoTaxaEfetiva.style.display = "none";
             taxaEfetivaConcorrencia.style.display = "none";
             taxaEfetivaBtn.checked = false
+            corpo.style.background = `var(--stone)`;
 
           } else {
             botaoComparar.style.display = "none";
@@ -60,10 +66,26 @@ function mostraBotaoConcorrencia() {
             botaoTaxaEfetiva.style.display = "flex";
           }
     })
-    
+        
 }
 mostraBotaoConcorrencia();
-
+function mudaFundo(){
+    
+    inputNomeConcorrencia.addEventListener('blur', () =>{
+    
+    var corConcorrencia = "concorrencia";
+    const verificadorNomeConcorrencia = nomeConcorrencia.value.toLowerCase();
+     if (verificadorNomeConcorrencia == "getnet" || verificadorNomeConcorrencia == "pagseguro" || verificadorNomeConcorrencia == "pag seguro" || verificadorNomeConcorrencia == "stone" || verificadorNomeConcorrencia == "cielo" ){
+    corConcorrencia = verificadorNomeConcorrencia;
+     }
+     
+     corpo.style.background = `var(--${corConcorrencia})`;    
+     if (verificadorNomeConcorrencia == "antiga"){
+        corpo.style.background = `var(--stone)`;       
+     }
+    })
+}
+mudaFundo();
 function mostraBotaoCalcular() {
   const calcular = document.getElementById("botaoCalcular");
   const resultadosConcorrencia = document.getElementById(
