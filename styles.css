@@ -1,7 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap');
+:root{
+    
+    --stone: linear-gradient(to right, rgb(0, 92, 57), rgb(3, 195, 121));
+    --getnet: linear-gradient(to right, #681212,#ed5c5c );
+    --pagseguro: linear-gradient(to right, #e4d249,#c8be38);
+    --cielo: linear-gradient(to right, #000000, #494949);
+    --concorrencia: linear-gradient(to right, #68683f, rgb(192, 199, 145));
+}
 
 .corpo {
-    background: linear-gradient(to right, rgb(0, 92, 57), rgb(3, 195, 121));
+    background: var(--stone);
     color: white;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -48,7 +56,7 @@
     top: 2.3rem;
     align-items: baseline;
     left: 0;
-    background: linear-gradient(to right, rgb(0, 92, 57), rgb(3, 195, 121));
+    background: var(--stone);
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
 
 }
@@ -152,7 +160,7 @@ li {
 }
 
 .concorrencia {
-    background: linear-gradient(to right, #68683f, rgb(192, 199, 145));
+    background:var(--stone);
     color: black;
 }
 
@@ -326,4 +334,9 @@ label {
     filter: invert(1);
     cursor: pointer;
 
+}
+
+#nomeConcorrencia{
+    margin-bottom: 2rem;
+    width: 6rem;
 }
