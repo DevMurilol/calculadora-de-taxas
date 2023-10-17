@@ -78,7 +78,12 @@ function mudaFundo(){
      if (verificadorNomeConcorrencia == "getnet" || verificadorNomeConcorrencia == "pagseguro" || verificadorNomeConcorrencia == "pag seguro" || verificadorNomeConcorrencia == "stone" || verificadorNomeConcorrencia == "cielo" ){
     corConcorrencia = verificadorNomeConcorrencia;
      }
-     
+     if(verificadorNomeConcorrencia == "cielo" ){
+        corpo.style.color = "#FFFFFF"
+     }
+     else{
+        corpo.style.color = "#000000"
+     }
      corpo.style.background = `var(--${corConcorrencia})`;    
      if (verificadorNomeConcorrencia == "antiga"){
         corpo.style.background = `var(--stone)`;       
