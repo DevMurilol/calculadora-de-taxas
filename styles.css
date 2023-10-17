@@ -41,6 +41,7 @@
     display: none;
 }
 .itens-menu {
+    width: 100vw;
     font-size: 1rem;
     flex-direction: column;
     position: absolute;
@@ -270,6 +271,9 @@ label {
 }
 #botaoTaxaEfetiva{
     display: none;
+}
+#simuladorDeVendas{
+    display: flex;
 }
 .digitar-texto-simulador{
     border-radius: 1rem;

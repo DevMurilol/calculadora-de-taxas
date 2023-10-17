@@ -10,6 +10,8 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Simulador de Vendas</title>
+    <script src="./js/menu.js" defer></script>
+    <script src="./js/simulador.js" defer></script>
 </head>
 <header class="cabecalho">
     <div class="cabecalho__container">
@@ -28,7 +30,7 @@
 <body class="corpo" id="corpo">
     <div class="taxa-concorrencia" id="taxaStone" >
         <H2 class="taxa-concorrencia__titulo">Calcular taxa da venda:</H2>
-        <input class="taxa-concorrencia__botao" id="taxa__botao-stone" onclick="mudaSimulacao()"
+        <input class="taxa-concorrencia__botao" onclick="mudaSimulacao()"
             type="checkbox"><br>
     </div>
     <section class="calculadora" id="simuladorDeVendas" onclick="escondeMenu()">
@@ -58,5 +60,4 @@
     <a href="https://www.linkedin.com/in/murilo-freitas-de-souza-862a5121b/" target="_blank"><img class="linkedin-logo"
             src="./img/linkedin-in.svg" alt="logo linkedin"></a>
 </footer>
-<script src="./js/main.js"></script>
 </html>
