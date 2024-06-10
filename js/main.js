@@ -72,8 +72,10 @@ mostraBotaoConcorrencia();
 function mudaFundo(){
     
     inputNomeConcorrencia.addEventListener('blur', () =>{
-    
-    var corConcorrencia = "concorrencia";
+     if (taxaStoneBtn.checked == false) {
+    var corConcorrencia = "stone";} else{
+       var corConcorrencia = "concorrencia";
+    }
     const verificadorNomeConcorrencia = nomeConcorrencia.value.toLowerCase();
      if (verificadorNomeConcorrencia == "getnet" || verificadorNomeConcorrencia == "pagseguro" || verificadorNomeConcorrencia == "pag seguro" || verificadorNomeConcorrencia == "stone" || verificadorNomeConcorrencia == "cielo" ){
     corConcorrencia = verificadorNomeConcorrencia;
@@ -85,10 +87,11 @@ function mudaFundo(){
         corpo.style.color = "#000000"
      }
      corpo.style.background = `var(--${corConcorrencia})`;    
-     if (verificadorNomeConcorrencia == "antiga"){
+     if (verificadorNomeConcorrencia == "antiga" ){
         corpo.style.background = `var(--stone)`;       
      }
     })
+    
 }
 mudaFundo();
 function mostraBotaoCalcular() {
