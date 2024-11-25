@@ -77,7 +77,7 @@ function mudaFundo(){
        var corConcorrencia = "concorrencia";
     }
     const verificadorNomeConcorrencia = nomeConcorrencia.value.toLowerCase();
-     if (verificadorNomeConcorrencia == "getnet" || verificadorNomeConcorrencia == "pagseguro" || verificadorNomeConcorrencia == "pag seguro" || verificadorNomeConcorrencia == "stone" || verificadorNomeConcorrencia == "cielo" ){
+     if (verificadorNomeConcorrencia == "rede" || verificadorNomeConcorrencia == "getnet" || verificadorNomeConcorrencia == "pagseguro" || verificadorNomeConcorrencia == "pag seguro" || verificadorNomeConcorrencia == "stone" || verificadorNomeConcorrencia == "cielo" ){
     corConcorrencia = verificadorNomeConcorrencia;
      }
      if(verificadorNomeConcorrencia == "cielo" ){
