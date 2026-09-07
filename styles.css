@@ -1,77 +1,749 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap');
-:root{
-    
-    --stone: linear-gradient(to right, rgb(0, 92, 57), rgb(3, 195, 121));
-    --getnet: linear-gradient(to right, #681212,#ed5c5c );
-    --pagseguro: linear-gradient(to right, #e4d249,#c8be38);
-    --cielo: linear-gradient(to right, #000000, #494949);
-    --rede: linear-gradient(to right, #FF6200, rgba(255, 98, 0, 0.8));
-    --concorrencia: linear-gradient(to right, #68683f, rgb(192, 199, 145));
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
+/* ------------------------------------------------------------------ tema
+   O fundo do site é neutro. As cores das operadoras (js/operadoras.js)
+   entram como acento: a linha sob o cabeçalho, a barra de cada card e o
+   cabeçalho do documento gerado. Verde e vermelho ficam reservados para
+   significado — quem tem a menor taxa —, nunca para decoração. */
+
+:root {
+    /* fundo: gradiente bege quente, de ivory a areia */
+    --fundo-de: #FCF8F0;
+    --fundo-meio: #F6EBDA;
+    --fundo-ate: #EFE1CB;
+
+    /* superfícies em branco quente — branco puro fica frio sobre bege */
+    --superficie: #FFFCF7;
+    --afundado: #F7F1E6;
+    --tinta: #2A2118;
+    --apagado: #7A6A55;
+    --borda: #E6D9C4;
+    --borda-forte: #D4C3A8;
+
+    /* ação: azul-tinta profundo. Fica separado do verde/vermelho, que aqui
+       têm significado (quem tem a menor taxa) e não podem virar decoração. */
+    --acao: #14304F;
+    --acao-clara: #1D4470;
+
+    /* semânticas, aquecidas para conviver com o bege */
+    --melhor: #1F6B4A;
+    --pior: #A33823;
+    --pior-fundo: #FBEDE6;
+
+    /* sombra um pouco mais firme: os cards precisam se destacar tanto do bege
+       quanto do fundo colorido da operadora */
+    --sombra: 0 2px 4px rgba(45, 33, 18, 0.10), 0 10px 24px rgba(45, 33, 18, 0.14);
+    --raio: 12px;
+
+    /* Cores da operadora. O comparador reescreve as três: as duas primeiras
+       pintam o fundo da página, e --tema-tinta é a cor de texto legível
+       sobre esse fundo (algumas marcas são claras, como o PagBank). */
+    --tema-de: rgb(0, 92, 57);
+    --tema-ate: rgb(3, 195, 121);
+    --tema-tinta: #2A2118;
+}
+
+/* O reset define `nav, section { display: block }`, e regras de classe como
+   `.envio { display: flex }` também vencem o atributo `hidden`. Sem isto,
+   nada que usa `hidden` some de fato da tela. */
+[hidden] {
+    display: none !important;
+}
+
+/* Dar um fundo próprio ao <html> impede que o fundo do <body> seja propagado
+   para o canvas. Sem isto o gradiente passa a ser medido pela caixa do <html>
+   (que o reset fixa em height:100%) e só cobre a primeira tela. */
+html {
+    background-color: var(--fundo-meio);
 }
 
 .corpo {
-    background: var(--stone);
-    color: white;
-    font-family: 'Roboto', sans-serif;
+    /* o gradiente cobre toda a altura do conteúdo, sem repetir nem emendar */
+    background: linear-gradient(160deg, var(--fundo-de) 0%, var(--fundo-meio) 45%, var(--fundo-ate) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-color: var(--fundo-meio);
+    color: var(--tinta);
+    font-family: 'Roboto', system-ui, sans-serif;
     font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Fundo com as cores da operadora, aplicado só onde há empresa escolhida
+   (o comparador). Da esquerda para a direita como antes — e isso passou a
+   significar algo: a ordem acompanha as colunas da tabela, quem propõe à
+   esquerda, a concorrente à direita. */
+.corpo--marca {
+    background-image: linear-gradient(to right, var(--tema-de), var(--tema-ate));
 }
 
 .material-symbols-outlined {
-
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 700,
-        'GRAD' 0,
-        'opsz' 48
+    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
 }
+
+/* ------------------------------------------------------ cabeçalho e menu */
 
 .cabecalho {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(180deg, #FFFDFA, var(--superficie));
+    color: var(--tinta);
+    border-bottom: 1px solid var(--borda);
+}
+
+/* a faixa da(s) operadora(s) escolhida(s) */
+.cabecalho::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(to right, var(--tema-de), var(--tema-ate));
+}
+
+.cabecalho__barra {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.6rem;
+    min-height: 56px;
+}
+
+.menu-botao {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--tinta);
+    cursor: pointer;
+    transition: background 180ms ease;
+}
+
+.menu-botao:hover {
+    background: var(--afundado);
+}
+
+.menu-botao:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 2px;
+}
+
+/* compensa a largura do botão para o título ficar realmente centralizado */
+.cabecalho__titulo {
+    flex: 1;
+    padding-right: 44px;
     text-align: center;
-    padding: 0.5rem 0;
-    font-size: 1.5rem;
+    font-size: 1.05rem;
     font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    text-wrap: balance;
+}
+
+.menu {
+    background: var(--superficie);
+    border-top: 1px solid var(--borda);
+    box-shadow: var(--sombra);
+}
+
+.menu__lista {
     display: flex;
     flex-direction: column;
-    color: #FFFFFF;
-    align-items: center;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
-    z-index: 2;
-    gap: 1rem;
-    justify-content: center;
 }
 
-.menu-hamburguer {
+.menu__lista li {
+    width: auto;
+    margin: 0;
+    text-align: left;
+}
+
+.menu__link {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.5rem 1.25rem;
+    color: var(--tinta);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 180ms ease;
+}
+
+.menu__link:hover {
+    background: var(--afundado);
+}
+
+.menu__link:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: -2px;
+}
+
+.menu__link[aria-current="page"] {
+    font-weight: 700;
+    background: var(--afundado);
+    box-shadow: inset 3px 0 0 var(--acao);
+}
+
+/* ------------------------------------------------------------ comparador */
+
+/* Escopado: as outras páginas ainda dimensionam pelo content-box e
+   encolheriam se isto fosse global. */
+.app,
+.app *,
+.app *::before,
+.app *::after {
+    box-sizing: border-box;
+}
+
+.app {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1.25rem 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* seletor segmentado — mesmo desenho no modo e no formato do documento */
+.modo {
+    border: 0;
+}
+
+.modo__legenda,
+.envio__rotulo {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--apagado);
+    padding: 0;
+}
+
+/* Este rótulo é o único texto que fica direto sobre o fundo, então segue a
+   cor legível da marca em vez do cinza dos cards. */
+.modo__legenda {
+    padding-bottom: 0.5rem;
+    color: var(--tema-tinta);
+}
+
+.modo__opcoes,
+.seletor {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.modo__opcao,
+.seletor__opcao {
+    flex: 1;
+}
+
+.modo__opcao input,
+.seletor__opcao input {
     position: absolute;
-    left: 0;
-    margin: 0 1rem;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modo__opcao span,
+.seletor__opcao span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 44px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    border: 1px solid var(--borda-forte);
+    border-radius: 10px;
+    background: var(--superficie);
+    color: var(--tinta);
+    cursor: pointer;
+    transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.modo__opcao input:checked+span,
+.seletor__opcao input:checked+span {
+    background: var(--acao);
+    border-color: var(--acao);
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.modo__opcao input:focus-visible+span,
+.seletor__opcao input:focus-visible+span {
+    outline: 2px solid var(--acao);
+    outline-offset: 2px;
+}
+
+/* ---------- últimas propostas ---------- */
+
+.historico {
+    background: var(--superficie);
+    color: var(--tinta);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    box-shadow: var(--sombra);
+    padding: 0.85rem 1rem 1rem;
+}
+
+.historico__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.historico__titulo {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--apagado);
+}
+
+.historico__limpar {
+    min-height: 32px;
+    padding: 0 0.5rem;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--apagado);
+    font-family: inherit;
+    font-size: 0.85rem;
+    text-decoration: underline;
     cursor: pointer;
 }
-#itens{
+
+.historico__limpar:hover {
+    background: var(--afundado);
+    color: var(--tinta);
+}
+
+.historico__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.historico__lista li {
+    width: auto;
+    margin: 0;
+    text-align: left;
+}
+
+.historico__abrir {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    width: 100%;
+    min-height: 48px;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--tinta);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 180ms ease, border-color 180ms ease;
+}
+
+.historico__abrir:hover {
+    background: var(--afundado);
+    border-color: var(--borda-forte);
+}
+
+.historico__abrir:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 2px;
+}
+
+.historico__nome {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.historico__meta {
+    font-size: 0.8rem;
+    color: var(--apagado);
+    line-height: 1.3;
+}
+
+.lados {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cartao,
+.lado,
+.saida,
+.envio {
+    background: var(--superficie);
+    color: var(--tinta);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    box-shadow: var(--sombra);
+}
+
+.lado {
+    overflow: hidden;
+}
+
+/* faixa com as cores da marca escolhida */
+.lado__marca {
+    height: 4px;
+    background: linear-gradient(to right, var(--marca-de), var(--marca-ate));
+}
+
+.lado__topo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1rem 0.75rem;
+}
+
+.lado__rotulo {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--apagado);
+}
+
+.lado__select {
+    width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+    font-family: inherit;
+    padding: 0 0.6rem;
+    border: 1px solid var(--borda-forte);
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--tinta);
+    cursor: pointer;
+}
+
+.lado__select:focus-visible,
+.campo__input:focus-visible,
+.envio__input:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 1px;
+    border-color: var(--acao);
+}
+
+.chave {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    padding: 0 1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.chave input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--acao);
+    cursor: pointer;
+}
+
+.campos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.5rem 1rem 1.15rem;
+}
+
+.campo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.campo--texto {
+    padding: 0 1rem;
+}
+
+.campo__rotulo {
+    flex: 1;
+    font-size: 1rem;
+    line-height: 1.3;
+    padding: 0;
+}
+
+.campo__entrada {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.campo__input,
+.envio__input {
+    min-height: 44px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid var(--borda-forte);
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--tinta);
+}
+
+.campo__input {
+    width: 7rem;
+    text-align: right;
+    padding: 0 1.9rem 0 0.6rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.campo__input--texto {
+    width: 100%;
+    text-align: left;
+    padding: 0 0.6rem;
+}
+
+.campo__sufixo {
+    position: absolute;
+    right: 0.7rem;
+    color: var(--apagado);
+    pointer-events: none;
+}
+
+.campo__input.invalido {
+    border-color: var(--pior);
+    background: var(--pior-fundo);
+}
+
+.acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.aviso {
+    margin: 0;
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid var(--pior);
+    border-left-width: 3px;
+    background: var(--pior-fundo);
+    color: var(--pior);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.aviso:empty {
     display: none;
 }
-.itens-menu {
-    width: 100vw;
-    font-size: 1rem;
+
+/* ------------------------------------------------------------- resultado */
+
+.saida,
+.envio {
+    padding: 1.15rem 1rem;
+}
+
+.saida:empty {
+    display: none;
+}
+
+.saida__titulo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    margin-bottom: 0.9rem;
+    text-wrap: balance;
+}
+
+.saida__titulo:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 3px;
+}
+
+.tabela-rolagem {
+    overflow-x: auto;
+}
+
+.tabela {
+    width: 100%;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+    border-collapse: collapse;
+}
+
+.tabela th,
+.tabela td {
+    padding: 0.5rem 0.4rem;
+    text-align: right;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--borda);
+}
+
+.tabela thead th {
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--apagado);
+    border-bottom: 1px solid var(--borda-forte);
+}
+
+.tabela tbody th[scope="row"] {
+    text-align: left;
+    font-weight: 700;
+}
+
+.tabela tbody tr:last-child th,
+.tabela tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.dif.e-melhor {
+    color: var(--melhor);
+    font-weight: 700;
+}
+
+.dif.e-pior {
+    color: var(--pior);
+    font-weight: 700;
+}
+
+.legenda {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--apagado);
+}
+
+/* ------------------------------------------------------ envio da proposta */
+
+.envio {
+    display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 2.3rem;
-    align-items: baseline;
-    left: 0;
-    background: var(--stone);
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
-
+    gap: 0.85rem;
 }
 
+.envio__titulo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
 
-li {
-    text-align: center;
-    width: 100vw;
-    margin: 0.5rem 0;
+.envio__campo,
+.envio__grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
 }
-.itens-menu__link{
-    text-decoration: none;
-    color: #FFF;
+
+.envio__grupo {
+    border: 0;
+    padding: 0;
 }
+
+.envio__rotulo--secao {
+    margin-top: 0.35rem;
+    border-top: 1px solid var(--borda);
+    padding-top: 0.85rem;
+}
+
+.envio__input {
+    width: 100%;
+    padding: 0 0.6rem;
+}
+
+.envio__botao,
+.calculadora__botao {
+    min-height: 48px;
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    border: 1px solid var(--borda-forte);
+    border-radius: 10px;
+    background: var(--superficie);
+    color: var(--tinta);
+    cursor: pointer;
+    transition: background 180ms ease, border-color 180ms ease;
+}
+
+.envio__botao:hover:not(:disabled),
+.calculadora__botao:hover:not(:disabled) {
+    background: var(--afundado);
+}
+
+.envio__botao:focus-visible,
+.calculadora__botao:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 2px;
+}
+
+.envio__botao:disabled {
+    opacity: 0.55;
+    cursor: progress;
+}
+
+/* O Calcular é a ação principal das três páginas. */
+.calculadora__botao,
+.envio__botao--principal {
+    background: linear-gradient(180deg, var(--acao-clara), var(--acao));
+    border-color: var(--acao);
+    color: #FFFFFF;
+}
+
+.calculadora__botao:hover:not(:disabled),
+.envio__botao--principal:hover:not(:disabled) {
+    background: linear-gradient(180deg, #24507F, var(--acao-clara));
+    border-color: var(--acao-clara);
+}
+
+.envio__botao--discreto {
+    font-weight: 400;
+    color: var(--apagado);
+}
+
+.canais {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.canais .envio__botao {
+    flex: 1;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.95rem;
+}
+
+.envio__dica,
+.envio__estado {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--apagado);
+}
+
+.envio__dica:empty,
+.envio__estado:empty {
+    display: none;
+}
+
+.envio__estado--erro {
+    color: var(--pior);
+    font-weight: 700;
+}
+
+/* --------------------------------------- simulador e antecipação (legado) */
 
 .taxa-concorrencia {
     display: flex;
@@ -81,74 +753,50 @@ li {
     margin: 1rem;
 }
 
-.taxa-concorrencia__botao:checked {
-    background-color: rgb(125, 255, 205);
-
-}
-
-.taxa__botao-stone:checked {
-    background-color: #DAffff;
-}
-
-.taxa-concorrencia__botao::before,
-.taxa__botao-stone::before {
-    content: '';
-    width: 1.5rem;
+.taxa-concorrencia__botao {
+    width: 3rem;
     height: 1.5rem;
-    border-radius: 2rem;
+    appearance: none;
+    background-color: var(--borda-forte);
+    border-radius: 1.5rem;
+    cursor: pointer;
+    transition: background-color 200ms ease;
     position: absolute;
-    box-shadow: inset 0px 4px 8px 5px rgba(0, 0, 0, 0.1);
-    transform: scale(1.1);
-
+    top: 0;
+    right: 0;
 }
 
 .taxa-concorrencia__botao::before {
-    background-color: #DAffff;
+    content: '';
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(16, 24, 21, 0.3);
+    transition: left 200ms ease;
 }
 
-.taxa__botao-stone::before {
-    background-color: rgb(180, 248, 191);
-    left: 1.5rem;
+.taxa-concorrencia__botao:checked {
+    background-color: var(--acao);
 }
 
-.taxa-concorrencia__botao:checked:before {
-    left: 1.5rem;
-    transition: .5s;
-    background-color: rgb(180, 248, 191);
+.taxa-concorrencia__botao:checked::before {
+    left: 1.625rem;
 }
 
-.taxa__botao-stone:checked:before {
-    left: 0;
-    background-color: #DAffff;
+.taxa-concorrencia__botao:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 2px;
 }
 
 .taxa-concorrencia__titulo {
     position: absolute;
     top: 50%;
     right: 4rem;
-}
-
-.taxa-concorrencia__botao,
-.taxa__botao-stone {
-    width: 3rem;
-    height: 1.5rem;
-    appearance: none;
-    background-color: #FFFFFF;
-    border-radius: 1.5rem;
-    box-shadow: inset 0px 0px 16px 1px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: .5s;
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-
-.taxa__botao-stone {
-    background-color: rgb(125, 255, 205);
-}
-
-.botaoComparar {
-    display: flex;
+    font-weight: 500;
 }
 
 .calculadora {
@@ -160,53 +808,34 @@ li {
     align-items: center;
 }
 
-.concorrencia {
-    background:var(--stone);
-    color: black;
-}
-
-.resultados-comparacao {
-    background: linear-gradient(to right, rgb(5, 204, 128), #2d2d2d, rgb(176, 182, 133));
-    color: #FFFFFF;
-}
-
 label {
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
 }
 
-.digitar-texto {
-    width: 2.5rem;
-    border-radius: 1rem;
-    border-color: black;
+.digitar-texto,
+.digitar-texto-simulador {
+    min-height: 44px;
+    width: 5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--borda-forte);
+    border-radius: 8px;
     padding: 0.5rem;
-    box-shadow: 2px 8px 4px rgba(0, 0, 0, 0.3);
-    text-align: center;
-}
-.digitar-taxa-efetiva{
-    width: 1.2rem;
-    border-radius: 10px;
-    padding: 0.5rem 0.8rem;
+    background: var(--superficie);
+    color: var(--tinta);
+    font-family: inherit;
+    font-size: 16px;
     text-align: center;
 }
 
-.taxa-efetiva{
-    display:none ;
-    flex-direction: column;
-    justify-content:center;
-    align-items: center;
-    gap: 0.5rem;
-    padding-top: 2rem;
+.digitar-texto:focus-visible,
+.digitar-texto-simulador:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 1px;
 }
 
 .calculadora__botao {
-    width: 8rem;
-    height: 3rem;
-    border-radius: 1rem;
-    padding: 0.5rem;
-    box-shadow: 2px 6px 4px rgba(0, 0, 0, 0.3);
-    font-weight: 700;
-    font-size: 20px;
-    cursor: pointer;
+    width: auto;
+    min-width: 9rem;
 }
 
 .container__botao {
@@ -221,25 +850,26 @@ label {
 }
 
 .resultados__texto {
-    background-color: white;
-    color: black;
-    border-radius: 5px;
-    width: 100px;
-    box-shadow: 8px 9px 6px rgba(0, 0, 0, 0.3);
-    margin: 1px;
-    padding: 5px 3px;
+    background-color: var(--superficie);
+    color: var(--tinta);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    width: 120px;
+    margin: 0;
+    padding: 0.4rem 0.6rem;
+    font-variant-numeric: tabular-nums;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-
+    justify-content: space-between;
 }
 
 .resultados__titulo {
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     margin: 0.5rem 0;
     width: 100%;
 }
@@ -248,96 +878,63 @@ label {
     display: flex;
     gap: 1rem;
     justify-content: center;
-
 }
 
-
-#resultados,
-#resultadosConcorrencia {
+#resultadosAntecipacaoProgramada {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
-    justify-content: center;
-    align-items: baseline;
-    font-size: 14px;
-}
-
-#resultadosConcorrencia {
-    display: none;
-}
-
-#botaoComparar {
-    display: flex;
+    gap: 0.3rem;
+    align-items: center;
 }
 
 #botaoCalcular {
     display: block;
 }
 
-#botaoContinuar {
-    display: none;
-    margin-bottom: 1rem;
-}
-#botaoTaxaEfetiva{
-    display: none;
-}
-#simuladorDeVendas{
+#simuladorDeVendas {
     display: flex;
 }
-.digitar-texto-simulador{
-    border-radius: 1rem;
-    border-color: black;
-    padding: 0.2rem;
-    box-shadow: 2px 8px 4px rgba(0, 0, 0, 0.3);
-    text-align: center;
-}
-.logo__container {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
 
+.resultados-simulador {
+    font-weight: 700;
 }
 
-.logo {
-    width: 250px;
-    margin-top: auto;
-    background-color: white;
-    border-radius: 2rem;
-    box-shadow: 8px 9px 6px rgba(0, 0, 0, 0.3);
-}
+/* ------------------------------------------------------------------ rodapé */
 
 .rodape {
-    background: linear-gradient(to right, #000, #2d2d2d);
+    background: var(--superficie);
+    border-top: 1px solid var(--borda);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10%;
+    gap: 1rem;
     text-align: center;
-    padding: 1rem 20%;
+    padding: 1.25rem 1rem;
 }
 
 .rodape__texto {
-    font-size: 0.8rem;
-    color: #FFF;
-}
-
-.rodape__texto:hover {
-    transform: scale(1.1);
-}
-
-.linkedin-logo:hover {
-    transform: scale(1.2);
+    font-size: 0.85rem;
+    color: var(--apagado);
 }
 
 .linkedin-logo {
-    width: 1.5rem;
+    width: 1.15rem;
     display: flex;
-    filter: invert(1);
+    opacity: 0.55;
     cursor: pointer;
-
+    transition: opacity 180ms ease;
 }
 
-#nomeConcorrencia{
-    margin-bottom: 2rem;
-    width: 6rem;
+.linkedin-logo:hover {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
 }

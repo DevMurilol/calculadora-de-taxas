@@ -1,18 +1,17 @@
-
 .digitar-texto-simulador {
-    width: 4rem;
-    border-radius: 1rem;
-    border-color: black;
-    padding: 0.5rem;
-    box-shadow: 2px 8px 4px rgba(0, 0, 0, 0.3);
-    text-align: center;
+    width: 9rem;
 }
-.resultados-simulador{
+
+.resultados-simulador {
     display: flex;
     justify-content: center;
-    font-size: 1rem;
+    text-align: center;
+    padding: 0 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
+    letter-spacing: -0.01em;
 }
-#simuladorDeTaxaAplicada{
+
+#simuladorDeTaxaAplicada {
     display: none;
 }

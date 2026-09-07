@@ -1,50 +1,99 @@
-
-.container-semana{
-    width:60%;
-    margin: 0 auto;
-    padding: 10px 0;
-    font-size: 0.7rem;
-    background-color: #898121;
-    font-weight: 700;
-    border-radius: 0px 0px 20px 20px;
-
+/* sem isto o título e o corpo do calendário não alinham: têm paddings
+   diferentes e esta página dimensiona pelo content-box */
+.calendario-titulo,
+.container-semana {
+    box-sizing: border-box;
 }
-.calendario-titulo
-{
-    width:60%;
+
+/* o campo de data precisa caber "dd/mm/aaaa" mais o ícone */
+#dataVenda {
+    width: 11rem;
+}
+
+.calendario-titulo {
+    width: min(100% - 2rem, 22rem);
     margin: 2rem auto 0 auto;
-    padding: 10px 0;
-    font-size: 1rem;
-    background-color: #E7B10A;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     text-align: center;
-    border-radius: 20px 20px 0px 0px;
-
+    background-color: var(--superficie);
+    color: var(--tinta);
+    border: 1px solid var(--borda);
+    border-bottom: 0;
+    border-radius: var(--raio) var(--raio) 0 0;
 }
-.dias-semana{
+
+.container-semana {
+    width: min(100% - 2rem, 22rem);
+    margin: 0 auto;
+    padding: 0.5rem 0.5rem 0.85rem;
+    background-color: var(--superficie);
+    border: 1px solid var(--borda);
+    border-top: 0;
+    border-radius: 0 0 var(--raio) var(--raio);
+    box-shadow: var(--sombra);
+}
+
+.dias-semana {
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
-.dias-semana__botao{
-    display: none;
-}
-.dia{
-    padding: 0.3rem;
-    border-radius:100%;
+/* colunas iguais: antes isso vinha de um `li { width: 100vw }` global
+   que servia ao menu e era encolhido pelo flex */
+.dias-semana li {
+    flex: 1 1 0;
+    text-align: center;
+    margin: 0.15rem 0;
 }
 
-.dias-semana__botao:checked ~ .dia {
-    background-color: #a2a378;
-
+.dias-semana__botao {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
 }
-.resultados__titulo{
+
+.dia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    margin: 0 auto;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--tinta);
+    cursor: pointer;
+    transition: background-color 180ms ease, color 180ms ease;
+}
+
+.dia:hover {
+    background-color: var(--afundado);
+}
+
+.dias-semana__botao:checked~.dia {
+    background-color: var(--acao);
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.dias-semana__botao:focus-visible~.dia {
+    outline: 2px solid var(--acao);
+    outline-offset: 2px;
+}
+
+.resultados__titulo {
     margin-top: 1rem;
 }
-.resultados-container{
-margin-bottom: 2rem;
+
+.resultados-container {
+    margin-bottom: 2rem;
 }
-.botao__programada{
+
+.botao__programada {
     margin: 2rem 0 1rem 0;
 }
