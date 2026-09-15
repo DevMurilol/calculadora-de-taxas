@@ -281,6 +281,52 @@ html {
     outline-offset: 2px;
 }
 
+/* ---------- limite de parcelas da proposta ---------- */
+
+/* Fica direto sobre o fundo da marca, como a legenda do modo. */
+.limite {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+}
+
+.limite__rotulo {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--tema-tinta);
+}
+
+.limite__select {
+    min-height: 44px;
+    min-width: 5.5rem;
+    font-size: 16px;
+    font-family: inherit;
+    font-variant-numeric: tabular-nums;
+    padding: 0 0.6rem;
+    border: 1px solid var(--borda-forte);
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--tinta);
+    cursor: pointer;
+}
+
+.limite__select:focus-visible {
+    outline: 2px solid var(--acao);
+    outline-offset: 2px;
+    border-color: var(--acao);
+}
+
+.limite__dica {
+    grid-column: 1 / -1;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--tema-tinta);
+    opacity: 0.85;
+}
+
 /* ---------- últimas propostas ---------- */
 
 .historico {
@@ -449,6 +495,13 @@ html {
     padding: 0 1rem;
     font-size: 0.95rem;
     cursor: pointer;
+}
+
+.lado__dica {
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--apagado);
 }
 
 .chave input {

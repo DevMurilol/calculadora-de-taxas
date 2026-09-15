@@ -64,7 +64,7 @@ function assinar(p) {
         .map(([k, v]) => `${k}=${v}`)
         .join(","),
     ].join("|");
-  return [p.modo, lado(p.a), p.modo === "comparar" ? lado(p.b) : ""].join("::");
+  return [p.modo, p.limite ?? "", lado(p.a), p.modo === "comparar" ? lado(p.b) : ""].join("::");
 }
 
 /** Mais recente primeiro. */
