@@ -1,5 +1,12 @@
-import { OPERADORAS, GRUPOS, obterOperadora, nomeExibido } from "./operadoras.js";
-import { montarProposta, resumoTexto, tituloProposta } from "./proposta.js";
+import {
+  OPERADORAS,
+  GRUPOS,
+  obterOperadora,
+  nomeExibido,
+  bandasAte,
+  rotuloBanda,
+} from "./operadoras.js";
+import { montarProposta, resumoTexto, tituloProposta, notaCobertura } from "./proposta.js";
 import {
   gerarArquivo,
   podeCompartilharArquivo,
@@ -14,7 +21,9 @@ import {
   formatarTaxa,
   formatarDiferenca,
   rotuloParcela,
-  PARCELAS_MAX,
+  limitesPossiveis,
+  ajustarLimite,
+  LIMITE_PADRAO,
 } from "./calculo.js";
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) =>
@@ -32,6 +41,7 @@ const criarLado = (operadoraId) => ({
 
 const estado = {
   modo: "comparar", // "unica" | "comparar"
+  limite: LIMITE_PADRAO, // até quantas parcelas a proposta é apresentada
   a: criarLado("stone"),
   b: criarLado("cielo"),
   resultado: null,
@@ -41,43 +51,91 @@ const ladosVisiveis = () => (estado.modo === "unica" ? ["a"] : ["a", "b"]);
 
 // --- campos de cada lado --------------------------------------------------
 
+// Campo opcional pode ficar em branco: quem tem a taxa efetiva pronta nem
+// sempre tem todas as faixas — a concorrente costuma parcelar em menos vezes.
 function camposDe(lado) {
   if (lado.efetiva) {
     return [
-      { chave: "debito", rotulo: "Débito" },
-      ...Array.from({ length: PARCELAS_MAX }, (_, i) => ({
+      { chave: "debito", rotulo: "Débito", opcional: true },
+      ...Array.from({ length: estado.limite }, (_, i) => ({
         chave: `p${i + 1}`,
         rotulo: rotuloParcela(i + 1),
+        opcional: true,
       })),
     ];
   }
   const op = obterOperadora(lado.operadoraId);
   return [
-    { chave: "debito", rotulo: "Débito" },
-    ...op.bandas.map((b) => ({ chave: b.id, rotulo: b.rotulo })),
+    { chave: "debito", rotulo: "Débito", opcional: true },
+    // o MDR de cada banda alimenta a fórmula: sem ele não há o que calcular
+    ...bandasAte(op, estado.limite).map((b) => ({
+      chave: b.id,
+      rotulo: rotuloBanda(b, estado.limite),
+    })),
     { chave: "rav", rotulo: "Taxa de antecipação (RAV)" },
   ];
 }
 
-function invalidosDe(lado) {
-  return camposDe(lado)
-    .filter(({ chave }) => !taxaValida(lerTaxa(lado.valores[chave] ?? "")))
-    .map(({ chave }) => chave);
+const preenchido = (lado, chave) => (lado.valores[chave] ?? "").trim() !== "";
+
+/** Até quantas parcelas este lado tem taxa efetiva digitada. */
+function ateOndeVai(lado) {
+  for (let n = estado.limite; n >= 1; n--) {
+    if (preenchido(lado, `p${n}`)) return n;
+  }
+  return 0;
+}
+
+/**
+ * Problemas do lado, já com o motivo: o aviso muda conforme o caso.
+ * "buraco" é parcela vazia no meio da sequência — só o fim da lista pode
+ * ficar em branco, senão a tabela sai com furo.
+ */
+function problemasDe(lado) {
+  const problemas = [];
+
+  camposDe(lado).forEach(({ chave, opcional }) => {
+    if (!preenchido(lado, chave)) {
+      if (!opcional) problemas.push({ chave, tipo: "vazio" });
+      return;
+    }
+    if (!taxaValida(lerTaxa(lado.valores[chave]))) problemas.push({ chave, tipo: "invalido" });
+  });
+
+  if (!lado.efetiva) return problemas;
+
+  const ate = ateOndeVai(lado);
+  if (ate === 0 && !preenchido(lado, "debito")) {
+    return [{ chave: "p1", tipo: "nenhuma" }];
+  }
+  for (let n = 1; n <= ate; n++) {
+    if (!preenchido(lado, `p${n}`)) problemas.push({ chave: `p${n}`, tipo: "buraco" });
+  }
+  return problemas;
 }
 
 function resultadoDe(lado) {
-  const op = obterOperadora(lado.operadoraId);
-  const v = (k) => lerTaxa(lado.valores[k] ?? "");
+  const num = (k) => {
+    const valor = lerTaxa(lado.valores[k] ?? "");
+    return taxaValida(valor) ? valor : null;
+  };
 
   if (lado.efetiva) {
     return {
-      debito: v("debito"),
-      parcelas: Array.from({ length: PARCELAS_MAX }, (_, i) => v(`p${i + 1}`)),
+      debito: num("debito"),
+      parcelas: Array.from({ length: ateOndeVai(lado) }, (_, i) => num(`p${i + 1}`)),
     };
   }
+  const op = obterOperadora(lado.operadoraId);
   const valores = {};
-  op.bandas.forEach((b) => (valores[b.id] = v(b.id)));
-  return calcularTaxas({ bandas: op.bandas, valores, rav: v("rav"), debito: v("debito") });
+  bandasAte(op, estado.limite).forEach((b) => (valores[b.id] = num(b.id)));
+  return calcularTaxas({
+    bandas: op.bandas,
+    valores,
+    rav: num("rav"),
+    debito: num("debito"),
+    limite: estado.limite,
+  });
 }
 
 // --- render: seletores e campos ------------------------------------------
@@ -98,7 +156,7 @@ function renderLado(chaveLado) {
   const idBase = `lado-${chaveLado}`;
 
   const campos = camposDe(lado)
-    .map(({ chave, rotulo }) => {
+    .map(({ chave, rotulo, opcional }) => {
       const id = `${idBase}-${chave}`;
       return `
         <div class="campo">
@@ -106,12 +164,17 @@ function renderLado(chaveLado) {
           <div class="campo__entrada">
             <input class="campo__input" id="${id}" data-lado="${chaveLado}" data-chave="${chave}"
                    type="text" inputmode="decimal" autocomplete="off"
-                   placeholder="0,00" value="${esc(lado.valores[chave] ?? "")}">
+                   placeholder="${opcional ? "—" : "0,00"}" value="${esc(lado.valores[chave] ?? "")}">
             <span class="campo__sufixo" aria-hidden="true">%</span>
           </div>
         </div>`;
     })
     .join("");
+
+  const dicaEfetiva = lado.efetiva
+    ? `<p class="lado__dica">Preencha só até onde tiver taxa — as parcelas em branco
+         ficam de fora da comparação.</p>`
+    : "";
 
   const nomeLivre = op.nomeLivre
     ? `<div class="campo campo--texto">
@@ -138,6 +201,7 @@ function renderLado(chaveLado) {
         <input type="checkbox" data-lado="${chaveLado}" data-efetiva ${lado.efetiva ? "checked" : ""}>
         <span>Já tenho a taxa efetiva pronta</span>
       </label>
+      ${dicaEfetiva}
       <div class="campos">${campos}</div>
     </section>`;
 }
@@ -158,95 +222,116 @@ function renderTema() {
   document.body.classList.add("corpo--marca");
 }
 
+function renderLimite() {
+  const select = document.getElementById("limite");
+  select.innerHTML = limitesPossiveis()
+    .map((n) => `<option value="${n}"${n === estado.limite ? " selected" : ""}>${n}x</option>`)
+    .join("");
+}
+
 function render() {
   document.getElementById("lados").innerHTML = ladosVisiveis().map(renderLado).join("");
   document.querySelectorAll("[data-modo]").forEach((r) => (r.checked = r.value === estado.modo));
+  renderLimite();
   renderTema();
 }
 
 // --- render: resultado ----------------------------------------------------
 
-function linhas(res) {
-  return [
-    { rotulo: "Débito", valor: res.debito },
-    ...res.parcelas.map((v, i) => ({ rotulo: rotuloParcela(i + 1), valor: v })),
-  ];
-}
-
+// A tela mostra exatamente a proposta que vira documento — assim não há como
+// a tabela e o arquivo enviado ao cliente discordarem.
 function renderResultado() {
   const saida = document.getElementById("saida");
-  const { a, b } = estado.resultado;
-  const nomeA = nomeExibido(obterOperadora(estado.a.operadoraId), estado.a.nomeLivre);
+  const p = propostaAtual();
 
-  if (!b) {
+  if (!p.comparacao) {
     saida.innerHTML = `
-      <h2 class="saida__titulo" tabindex="-1">${esc(nomeA)}</h2>
+      <h2 class="saida__titulo" tabindex="-1">${esc(p.nomeA)}</h2>
       <div class="tabela-rolagem">
         <table class="tabela">
           <thead><tr><th scope="col">Parcela</th><th scope="col">Taxa efetiva</th></tr></thead>
-          <tbody>${linhas(a)
-            .map((l) => `<tr><th scope="row">${l.rotulo}</th><td>${formatarTaxa(l.valor)}</td></tr>`)
+          <tbody>${p.linhas
+            .map((l) => `<tr><th scope="row">${l.rotulo}</th><td>${formatarTaxa(l.a)}</td></tr>`)
             .join("")}</tbody>
         </table>
       </div>`;
     return;
   }
 
-  const nomeB = nomeExibido(obterOperadora(estado.b.operadoraId), estado.b.nomeLivre);
-  const la = linhas(a);
-  const lb = linhas(b);
-  const vitoriasA = la.filter((l, i) => l.valor < lb[i].valor).length;
-
-  const corpo = la
-    .map((l, i) => {
-      const dif = l.valor - lb[i].valor;
-      const classe = dif < 0 ? "e-melhor" : dif > 0 ? "e-pior" : "";
+  const corpo = p.linhas
+    .map((l) => {
+      const classe = l.dif < 0 ? "e-melhor" : l.dif > 0 ? "e-pior" : "";
       return `<tr>
         <th scope="row">${l.rotulo}</th>
-        <td>${formatarTaxa(l.valor)}</td>
-        <td>${formatarTaxa(lb[i].valor)}</td>
-        <td class="dif ${classe}">${formatarDiferenca(dif)}</td>
+        <td>${formatarTaxa(l.a)}</td>
+        <td>${formatarTaxa(l.b)}</td>
+        <td class="dif ${classe}">${formatarDiferenca(l.dif)}</td>
       </tr>`;
     })
     .join("");
 
+  const nota = notaCobertura(p);
+
   saida.innerHTML = `
-    <h2 class="saida__titulo" tabindex="-1">
-      ${esc(nomeA)} tem a menor taxa em ${vitoriasA} de ${la.length} faixas
-    </h2>
+    <h2 class="saida__titulo" tabindex="-1">${esc(chamadaDoTitulo(p))}</h2>
     <div class="tabela-rolagem">
       <table class="tabela">
         <thead><tr>
           <th scope="col">Parcela</th>
-          <th scope="col">${esc(nomeA)}</th>
-          <th scope="col">${esc(nomeB)}</th>
+          <th scope="col">${esc(p.nomeA)}</th>
+          <th scope="col">${esc(p.nomeB)}</th>
           <th scope="col">Diferença</th>
         </tr></thead>
         <tbody>${corpo}</tbody>
       </table>
     </div>
     <p class="legenda">
-      Diferença em pontos percentuais, ${esc(nomeA)} menos ${esc(nomeB)}.
-      Negativo (verde) = ${esc(nomeA)} tem a menor taxa na faixa.
+      ${nota ? `${esc(nota)}<br>` : ""}
+      Diferença em pontos percentuais, ${esc(p.nomeA)} menos ${esc(p.nomeB)}.
+      Negativo (verde) = ${esc(p.nomeA)} tem a menor taxa na faixa.
     </p>`;
 }
 
+const chamadaDoTitulo = (p) =>
+  p.comparaveis === 0
+    ? `Proposta ${p.nomeA}`
+    : `${p.nomeA} tem a menor taxa em ${p.vitoriasA} de ${p.comparaveis} faixas`;
+
 // --- ações ----------------------------------------------------------------
+
+// Um aviso por vez, o do problema mais específico: dizer "faltam 3 taxas"
+// quando o caso é um buraco no meio da lista só faz o usuário procurar.
+// O campo que recebe o foco é o mesmo que o aviso descreve.
+const ORDEM_PROBLEMAS = ["buraco", "nenhuma", "invalido", "vazio"];
+
+const problemaPrincipal = (problemas) =>
+  problemas.reduce((melhor, p) =>
+    ORDEM_PROBLEMAS.indexOf(p.tipo) < ORDEM_PROBLEMAS.indexOf(melhor.tipo) ? p : melhor);
+
+function avisoDe(problema, quantos) {
+  if (problema.tipo === "buraco") {
+    return `Faltou a taxa de ${problema.chave.slice(1)}x. Preencha as parcelas em ` +
+      "sequência — só o fim da lista pode ficar em branco.";
+  }
+  if (problema.tipo === "nenhuma") return "Preencha ao menos uma taxa efetiva.";
+  if (problema.tipo === "invalido") return "Revise as taxas destacadas: use números entre 0 e 100.";
+  return quantos === 1
+    ? "Falta preencher 1 taxa (use números entre 0 e 100)."
+    : `Faltam preencher ${quantos} taxas (use números entre 0 e 100).`;
+}
 
 function calcular() {
   document.querySelectorAll(".campo__input").forEach((i) => i.classList.remove("invalido"));
   document.getElementById("aviso").textContent = "";
 
   const pendentes = ladosVisiveis().flatMap((k) =>
-    invalidosDe(estado[k]).map((chave) => `${k}-${chave}`));
+    problemasDe(estado[k]).map((p) => ({ ...p, id: `lado-${k}-${p.chave}` })));
 
   if (pendentes.length > 0) {
-    pendentes.forEach((id) => document.getElementById(`lado-${id}`)?.classList.add("invalido"));
-    document.getElementById("aviso").textContent =
-      pendentes.length === 1
-        ? "Falta preencher 1 taxa (use números entre 0 e 100)."
-        : `Faltam preencher ${pendentes.length} taxas (use números entre 0 e 100).`;
-    document.getElementById(`lado-${pendentes[0]}`)?.focus();
+    pendentes.forEach(({ id }) => document.getElementById(id)?.classList.add("invalido"));
+    const principal = problemaPrincipal(pendentes);
+    document.getElementById("aviso").textContent = avisoDe(principal, pendentes.length);
+    document.getElementById(principal.id)?.focus();
     estado.resultado = null;
     document.getElementById("saida").innerHTML = "";
     mostrarEnvio(false);
@@ -317,6 +402,15 @@ document.querySelectorAll("[data-modo]").forEach((radio) =>
     render();
   })
 );
+
+// Mudar o limite muda quais campos são pedidos, então o formulário é redesenhado.
+// O que já foi digitado acima do limite continua guardado no estado: se o usuário
+// voltar para 18x, os valores reaparecem.
+document.getElementById("limite").addEventListener("change", (e) => {
+  estado.limite = ajustarLimite(Number(e.target.value));
+  limparResultado();
+  render();
+});
 
 document.getElementById("calcular").addEventListener("click", calcular);
 
@@ -454,6 +548,7 @@ function guardarProposta() {
   const salva = armazem.salvar({
     cliente: campoCliente.value.trim(),
     modo: estado.modo,
+    limite: estado.limite,
     a: instantaneoLado(estado.a),
     b: instantaneoLado(estado.b),
   });
@@ -504,6 +599,7 @@ function aplicarProposta(id) {
   if (!p) return;
 
   estado.modo = p.modo;
+  estado.limite = ajustarLimite(p.limite); // propostas antigas não guardavam o limite
   estado.a = { ...criarLado(p.a.operadoraId), ...p.a, valores: { ...p.a.valores } };
   estado.b = { ...criarLado(p.b.operadoraId), ...p.b, valores: { ...p.b.valores } };
   campoCliente.value = p.cliente ?? "";

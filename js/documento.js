@@ -3,7 +3,7 @@
 // pesam para quem só compartilha imagem).
 
 import { formatarTaxa, formatarDiferenca } from "./calculo.js";
-import { tituloProposta, chamada, nomeArquivo } from "./proposta.js";
+import { tituloProposta, chamada, nomeArquivo, notaCobertura } from "./proposta.js";
 
 const JSPDF_CDN = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
 
@@ -25,6 +25,17 @@ function corParaRGB(cor) {
 }
 
 const rgbCss = ([r, g, b]) => `rgb(${r}, ${g}, ${b})`;
+
+/** Rodapé do documento: o que a tabela sozinha não explica. */
+function notasDe(p) {
+  return [
+    p.comparacao
+      ? `Diferença em pontos percentuais (${p.nomeA} menos ${p.nomeB}).`
+      : "Taxa efetiva por parcela.",
+    notaCobertura(p),
+    "Simulação sujeita a confirmação. Gerado pela Calculadora de Taxas.",
+  ].filter(Boolean);
+}
 
 // ---------------------------------------------------------------- imagem
 
@@ -51,8 +62,11 @@ export async function gerarImagem(p) {
   if (document.fonts?.ready) await document.fonts.ready;
 
   const cols = colunas(p);
+  const notas = notasDe(p);
   const topoTabela = IMG.alturaCabecalho + 76;
-  const altura = topoTabela + IMG.alturaLinha * (p.linhas.length + 1) + 72;
+  const fimTabela = topoTabela + IMG.alturaLinha * (p.linhas.length + 1);
+  const topoNotas = fimTabela + 34;
+  const altura = topoNotas + notas.length * 20 + 6;
 
   const canvas = document.createElement("canvas");
   canvas.width = IMG.largura * IMG.escala;
@@ -141,23 +155,28 @@ export async function gerarImagem(p) {
 
   // rodapé
   ctx.textAlign = "left";
-  ctx.font = "400 13px Roboto, sans-serif";
   ctx.fillStyle = "#7A6A55";
-  const yPe = altura - 38;
-  ctx.fillText(
-    p.comparacao
-      ? `Diferença em pontos percentuais (${p.nomeA} menos ${p.nomeB}).`
-      : "Taxa efetiva por parcela.",
-    x0,
-    yPe
-  );
-  ctx.fillText("Simulação sujeita a confirmação. Gerado pela Calculadora de Taxas.", x0, yPe + 20);
+  const larguraUtil = IMG.largura - IMG.margem * 2;
+  notas.forEach((nota, i) => {
+    // nome de operadora comprido pode estourar a linha: encolhe até caber
+    let tamanho = 13;
+    ctx.font = `400 ${tamanho}px Roboto, sans-serif`;
+    while (tamanho > 10 && ctx.measureText(nota).width > larguraUtil) {
+      tamanho -= 1;
+      ctx.font = `400 ${tamanho}px Roboto, sans-serif`;
+    }
+    ctx.fillText(nota, x0, topoNotas + i * 20);
+  });
 
   const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
   return new File([blob], nomeArquivo(p, "png"), { type: "image/png" });
 }
 
 // ------------------------------------------------------------------- pdf
+
+// As fontes padrão do PDF usam WinAnsi, que não tem os traços tipográficos:
+// o "−" do sinal negativo e o "—" das faixas sem taxa viram hífen.
+const pdfTexto = (s) => String(s).replace(/[−—–]/g, "-");
 
 let promessaJsPDF;
 
@@ -245,21 +264,16 @@ export async function gerarPDF(p) {
     doc.text(formatarTaxa(l.a), bordaDir[1], y, { align: "right" });
 
     if (p.comparacao) {
-      doc.text(formatarTaxa(l.b), bordaDir[2], y, { align: "right" });
+      doc.text(pdfTexto(formatarTaxa(l.b)), bordaDir[2], y, { align: "right" });
       const c = l.dif < 0 ? [31, 107, 74] : l.dif > 0 ? [163, 56, 35] : [122, 106, 85];
       doc.setTextColor(...c).setFont("helvetica", "bold");
-      // o "−" tipográfico não existe no WinAnsi do PDF; usa hífen comum
-      doc.text(formatarDiferenca(l.dif).replace("−", "-"), bordaDir[3], y, { align: "right" });
+      doc.text(pdfTexto(formatarDiferenca(l.dif)), bordaDir[3], y, { align: "right" });
     }
   });
 
   y += 12;
   doc.setFont("helvetica", "normal").setFontSize(8).setTextColor(122, 106, 85);
-  if (p.comparacao) {
-    doc.text(`Diferença em pontos percentuais (${p.nomeA} menos ${p.nomeB}).`, M, y);
-    y += 4.5;
-  }
-  doc.text("Simulação sujeita a confirmação. Gerado pela Calculadora de Taxas.", M, y);
+  notasDe(p).forEach((nota, i) => doc.text(pdfTexto(nota), M, y + i * 4.5));
 
   const blob = doc.output("blob");
   return new File([blob], nomeArquivo(p, "pdf"), { type: "application/pdf" });

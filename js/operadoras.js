@@ -211,6 +211,21 @@ export function obterOperadora(id) {
   return OPERADORAS.find((o) => o.id === id) ?? OPERADORAS[0];
 }
 
+/**
+ * Só as bandas que ainda cabem no limite de parcelas da proposta. Quem
+ * apresenta até 6x não precisa cotar a faixa de 7x a 12x.
+ */
+export function bandasAte(operadora, limite) {
+  return operadora.bandas.filter((b) => b.de <= limite);
+}
+
+/** Rótulo da banda cortado pelo limite: "Crédito 7x a 12x" vira "7x a 8x". */
+export function rotuloBanda(banda, limite) {
+  if (banda.ate <= limite) return banda.rotulo;
+  if (banda.de === limite) return `Crédito ${banda.de}x`;
+  return `Crédito ${banda.de}x a ${limite}x`;
+}
+
 /** Nome a exibir: o digitado, quando a operadora aceita nome livre. */
 export function nomeExibido(operadora, nomeLivre) {
   if (operadora.nomeLivre && nomeLivre.trim() !== "") return nomeLivre.trim();
