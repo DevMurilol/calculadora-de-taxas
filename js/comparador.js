@@ -187,9 +187,10 @@ function renderLado(chaveLado) {
   const chaveAvista = lado.efetiva
     ? ""
     : `<label class="chave">
-         <input type="checkbox" data-lado="${chaveLado}" data-avista-efetiva
+         <span class="chave__texto">Crédito à vista já vem com antecipação</span>
+         <input class="chave__input" type="checkbox" data-lado="${chaveLado}" data-avista-efetiva
                 ${lado.avistaEfetiva ? "checked" : ""}>
-         <span>Crédito à vista já vem com antecipação</span>
+         <span class="chave__trilho" aria-hidden="true"></span>
        </label>
        ${lado.avistaEfetiva
          ? `<p class="lado__dica">A taxa à vista entra como está — o RAV só é
@@ -218,8 +219,10 @@ function renderLado(chaveLado) {
       </div>
       ${nomeLivre}
       <label class="chave">
-        <input type="checkbox" data-lado="${chaveLado}" data-efetiva ${lado.efetiva ? "checked" : ""}>
-        <span>Já tenho a taxa efetiva pronta</span>
+        <span class="chave__texto">Já tenho a taxa efetiva pronta</span>
+        <input class="chave__input" type="checkbox" data-lado="${chaveLado}" data-efetiva
+               ${lado.efetiva ? "checked" : ""}>
+        <span class="chave__trilho" aria-hidden="true"></span>
       </label>
       ${dicaEfetiva}
       ${chaveAvista}
