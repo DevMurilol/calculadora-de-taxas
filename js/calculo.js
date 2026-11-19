@@ -34,13 +34,27 @@ export function taxaDaParcela({ mdr, rav, parcela }) {
 /**
  * Calcula as parcelas a partir do MDR de cada banda e da taxa de antecipação.
  * Vai só até `limite`: as bandas acima dele nem são perguntadas na tela.
+ *
+ * `avistaEfetiva` cobre os portais que já cotam o crédito à vista com a
+ * antecipação embutida (o PagBank é assim): ali o número digitado JÁ é a taxa
+ * efetiva, e aplicar o RAV de novo cobraria a antecipação duas vezes. O
+ * parcelado continua sendo calculado normalmente, de 2x em diante.
+ *
  * @returns {{ debito: number|null, parcelas: number[] }}
  */
-export function calcularTaxas({ bandas, valores, rav, debito, limite = PARCELAS_MAX }) {
+export function calcularTaxas({
+  bandas,
+  valores,
+  rav,
+  debito,
+  limite = PARCELAS_MAX,
+  avistaEfetiva = false,
+}) {
   const parcelas = [];
   for (let n = 1; n <= limite; n++) {
     const banda = bandas.find((b) => n >= b.de && n <= b.ate);
-    parcelas.push(taxaDaParcela({ mdr: valores[banda.id], rav, parcela: n }));
+    const mdr = valores[banda.id];
+    parcelas.push(avistaEfetiva && n === 1 ? mdr : taxaDaParcela({ mdr, rav, parcela: n }));
   }
   return { debito, parcelas };
 }
