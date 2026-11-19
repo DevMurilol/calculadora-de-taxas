@@ -5,6 +5,7 @@ import {
   nomeExibido,
   bandasAte,
   rotuloBanda,
+  avistaEfetivaPadrao,
 } from "./operadoras.js";
 import { montarProposta, resumoTexto, tituloProposta, notaCobertura } from "./proposta.js";
 import {
@@ -36,6 +37,8 @@ const criarLado = (operadoraId) => ({
   operadoraId,
   nomeLivre: "",
   efetiva: false, // true = usuário digita a taxa efetiva pronta
+  // true = a taxa à vista digitada já vem com a antecipação (PagBank é assim)
+  avistaEfetiva: avistaEfetivaPadrao(operadoraId),
   valores: {},
 });
 
@@ -70,7 +73,10 @@ function camposDe(lado) {
     // o MDR de cada banda alimenta a fórmula: sem ele não há o que calcular
     ...bandasAte(op, estado.limite).map((b) => ({
       chave: b.id,
-      rotulo: rotuloBanda(b, estado.limite),
+      // a banda da à vista avisa quando o número digitado já é a taxa final
+      rotulo: lado.avistaEfetiva && b.de === 1
+        ? `${rotuloBanda(b, estado.limite)} (taxa efetiva)`
+        : rotuloBanda(b, estado.limite),
     })),
     { chave: "rav", rotulo: "Taxa de antecipação (RAV)" },
   ];
@@ -135,6 +141,7 @@ function resultadoDe(lado) {
     rav: num("rav"),
     debito: num("debito"),
     limite: estado.limite,
+    avistaEfetiva: lado.avistaEfetiva,
   });
 }
 
@@ -176,6 +183,20 @@ function renderLado(chaveLado) {
          ficam de fora da comparação.</p>`
     : "";
 
+  // Só faz sentido no modo MDR: com a taxa efetiva pronta, nada é calculado.
+  const chaveAvista = lado.efetiva
+    ? ""
+    : `<label class="chave">
+         <span class="chave__texto">Crédito à vista já vem com antecipação</span>
+         <input class="chave__input" type="checkbox" data-lado="${chaveLado}" data-avista-efetiva
+                ${lado.avistaEfetiva ? "checked" : ""}>
+         <span class="chave__trilho" aria-hidden="true"></span>
+       </label>
+       ${lado.avistaEfetiva
+         ? `<p class="lado__dica">A taxa à vista entra como está — o RAV só é
+              aplicado de 2x em diante.</p>`
+         : ""}`;
+
   const nomeLivre = op.nomeLivre
     ? `<div class="campo campo--texto">
          <label class="campo__rotulo" for="${idBase}-nome">Nome da operadora</label>
@@ -198,10 +219,13 @@ function renderLado(chaveLado) {
       </div>
       ${nomeLivre}
       <label class="chave">
-        <input type="checkbox" data-lado="${chaveLado}" data-efetiva ${lado.efetiva ? "checked" : ""}>
-        <span>Já tenho a taxa efetiva pronta</span>
+        <span class="chave__texto">Já tenho a taxa efetiva pronta</span>
+        <input class="chave__input" type="checkbox" data-lado="${chaveLado}" data-efetiva
+               ${lado.efetiva ? "checked" : ""}>
+        <span class="chave__trilho" aria-hidden="true"></span>
       </label>
       ${dicaEfetiva}
+      ${chaveAvista}
       <div class="campos">${campos}</div>
     </section>`;
 }
@@ -386,8 +410,12 @@ lados.addEventListener("change", (e) => {
   if (!lado) return;
   if (el.hasAttribute("data-operadora")) {
     lado.operadoraId = el.value;
+    // cada portal cota a à vista de um jeito: o padrão acompanha a operadora
+    lado.avistaEfetiva = avistaEfetivaPadrao(el.value);
   } else if (el.hasAttribute("data-efetiva")) {
     lado.efetiva = el.checked;
+  } else if (el.hasAttribute("data-avista-efetiva")) {
+    lado.avistaEfetiva = el.checked;
   } else {
     return;
   }
@@ -539,6 +567,7 @@ function instantaneoLado(lado) {
     operadoraId: lado.operadoraId,
     nomeLivre: lado.nomeLivre,
     efetiva: lado.efetiva,
+    avistaEfetiva: lado.avistaEfetiva,
     valores,
   };
 }

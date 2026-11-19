@@ -113,6 +113,9 @@ export const OPERADORAS = [
     cor: { de: "#E4D249", ate: "#C8BE38" },
     textoClaro: false,
     bandas: FAIXA_CHEIA,
+    // O portal do PagBank mostra o crédito à vista já com a antecipação
+    // embutida — a taxa que aparece lá é a efetiva. Ver avistaEfetivaPadrao.
+    avistaEfetiva: true,
   },
   {
     id: "mercadopago",
@@ -225,6 +228,14 @@ export function rotuloBanda(banda, limite) {
   if (banda.de === limite) return `Crédito ${banda.de}x`;
   return `Crédito ${banda.de}x a ${limite}x`;
 }
+
+/**
+ * Se o crédito à vista desta operadora costuma ser cotado já com a
+ * antecipação embutida. É só o estado inicial do interruptor na tela: o
+ * usuário liga e desliga em qualquer operadora, porque não dá para saber
+ * de antemão como cada portal apresenta a taxa.
+ */
+export const avistaEfetivaPadrao = (id) => obterOperadora(id).avistaEfetiva === true;
 
 /** Nome a exibir: o digitado, quando a operadora aceita nome livre. */
 export function nomeExibido(operadora, nomeLivre) {

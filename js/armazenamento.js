@@ -58,6 +58,7 @@ function assinar(p) {
       l.operadoraId,
       l.nomeLivre ?? "",
       l.efetiva ? 1 : 0,
+      l.avistaEfetiva ? 1 : 0,
       Object.entries(l.valores ?? {})
         .filter(([, v]) => v !== "" && v != null)
         .sort(([a], [b]) => a.localeCompare(b))
